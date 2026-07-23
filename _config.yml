@@ -1,0 +1,42 @@
+title: Bipin Maharjan
+tagline: Data-driven control for microgrids
+description: >-
+  Graduate electrical engineering researcher working on Koopman operator
+  methods, model predictive control, and reinforcement learning for
+  grid-forming inverters in islanded AC microgrids.
+
+url: "https://bipinmaharjan7.com.np"
+baseurl: ""
+
+author:
+  name: Bipin Maharjan
+  role: Graduate researcher, electrical engineering
+
+contact:
+  email: bipin.mhr22@gmail.com
+  github: BpnMaharjan007
+  scholar: ""
+  linkedin: ""
+  orcid: ""
+
+markdown: kramdown
+permalink: /writing/:title/
+timezone: Asia/Kathmandu
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post

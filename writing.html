@@ -1,0 +1,28 @@
+---
+layout: default
+title: Writing
+permalink: /writing/
+---
+
+<section class="wrap section section-lead">
+  <p class="section-mark">Writing</p>
+  <div class="section-body">
+    <h1 class="section-title">Writing</h1>
+    <p class="section-intro">
+      Working notes on control, inverters, and the gap between a paper's results
+      section and a simulation that actually runs.
+    </p>
+
+    <ul class="postlist postlist-full">
+      {% for post in site.posts %}
+      <li class="postrow">
+        <a href="{{ post.url | relative_url }}">
+          <span class="postrow-date">{{ post.date | date: "%d %b %Y" }}</span>
+          <span class="postrow-title">{{ post.title }}</span>
+        </a>
+        {% if post.summary %}<p class="postrow-summary">{{ post.summary }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

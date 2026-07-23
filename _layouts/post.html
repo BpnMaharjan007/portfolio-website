@@ -1,0 +1,14 @@
+---
+layout: default
+---
+<article class="wrap prose-page">
+  <p class="eyebrow">{{ page.date | date: "%d %b %Y" }}{% if page.tags.size > 0 %} &middot; {{ page.tags | join: " &middot; " }}{% endif %}</p>
+  <h1 class="prose-title">{{ page.title }}</h1>
+  {% if page.summary %}<p class="prose-lede">{{ page.summary }}</p>{% endif %}
+
+  <div class="prose">
+    {{ content }}
+  </div>
+
+  <p class="back"><a href="{{ '/writing/' | relative_url }}">All writing</a></p>
+</article>

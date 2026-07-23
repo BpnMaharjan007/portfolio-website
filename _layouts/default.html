@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  {% seo %}
+  {% feed_meta %}
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <a class="wordmark" href="{{ '/' | relative_url }}">
+      <span class="wordmark-name">{{ site.author.name }}</span>
+      <span class="wordmark-sub">{{ site.tagline }}</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="{{ '/' | relative_url }}#research">Research</a>
+      <a href="{{ '/writing/' | relative_url }}">Writing</a>
+      <a href="{{ '/about/' | relative_url }}">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    {{ content }}
+  </main>
+
+  <footer class="colophon">
+    <div class="colophon-inner">
+      <p class="colophon-line">{{ site.author.name }} &middot; {{ site.author.role }}</p>
+      <p class="colophon-line colophon-links">
+        <a href="mailto:{{ site.contact.email }}">Email</a>
+        {% if site.contact.github != "" %}<a href="https://github.com/{{ site.contact.github }}">GitHub</a>{% endif %}
+        {% if site.contact.scholar != "" %}<a href="{{ site.contact.scholar }}">Scholar</a>{% endif %}
+        {% if site.contact.linkedin != "" %}<a href="{{ site.contact.linkedin }}">LinkedIn</a>{% endif %}
+        <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
