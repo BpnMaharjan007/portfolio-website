@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Home
+simulation: true
 ---
 
 <section class="hero wrap">
@@ -19,12 +20,12 @@ title: Home
     </p>
   </div>
 
-  <figure class="hero-figure">
-    <svg viewBox="0 0 520 250" role="img" aria-labelledby="plot-title plot-desc" class="plot">
+  <figure class="hero-figure" data-sim>
+    <svg viewBox="0 0 520 250" role="img" aria-labelledby="plot-title plot-desc" class="plot" data-sim-plot>
       <title id="plot-title">Islanded frequency response to a load step</title>
       <desc id="plot-desc">Two frequency traces after a load step. The PI baseline dips further below the 50 hertz setpoint and takes longer to settle than the Koopman MPC trace.</desc>
 
-      <g class="grid">
+      <g class="grid" data-grid>
         <line x1="56" y1="63" x2="500" y2="63"/>
         <line x1="56" y1="117" x2="500" y2="117"/>
         <line x1="56" y1="143" x2="500" y2="143"/>
@@ -32,7 +33,7 @@ title: Home
         <line x1="56" y1="197" x2="500" y2="197"/>
       </g>
 
-      <g class="axis-label">
+      <g class="axis-label" data-yticks>
         <text x="48" y="67" text-anchor="end">50.2</text>
         <text x="48" y="94" text-anchor="end">50.0</text>
         <text x="48" y="121" text-anchor="end">49.8</text>
@@ -42,20 +43,69 @@ title: Home
 
       <line class="axis" x1="56" y1="30" x2="56" y2="210"/>
       <line class="axis" x1="56" y1="210" x2="500" y2="210"/>
-      <line class="setpoint" x1="56" y1="90" x2="500" y2="90"/>
-      <line class="event" x1="140" y1="30" x2="140" y2="210"/>
-      <text class="axis-label event-label" x="146" y="44">load step</text>
+      <line class="setpoint" data-setpoint x1="56" y1="90" x2="500" y2="90"/>
+      <line class="event" data-event x1="140" y1="30" x2="140" y2="210"/>
+      <text class="axis-label event-label" data-event-label x="146" y="44">load step</text>
 
-      <path class="trace trace-base" d="M56,90 L140,90 C160,90 170,168 200,170 C230,172 250,110 280,102 C305,96 315,118 340,112 C365,106 380,94 410,92 C440,90 470,90 500,90"/>
-      <path class="trace trace-main" d="M56,90 L140,90 C158,90 168,153 190,155 C215,157 235,103 262,97 C288,92 305,93 335,91 C375,90 460,90 500,90"/>
+      <path class="trace trace-base" data-trace-base d="M56,90 L140,90 C160,90 170,168 200,170 C230,172 250,110 280,102 C305,96 315,118 340,112 C365,106 380,94 410,92 C440,90 470,90 500,90"/>
+      <path class="trace trace-main" data-trace-main d="M56,90 L140,90 C158,90 168,153 190,155 C215,157 235,103 262,97 C288,92 305,93 335,91 C375,90 460,90 500,90"/>
 
       <text class="axis-label axis-x" x="500" y="228" text-anchor="end">time &rarr;</text>
     </svg>
+
+    <div class="sim-controls" data-sim-controls hidden>
+      <div class="sim-field">
+        <label class="sim-name" for="sim-load">Load step</label>
+        <input class="sim-range" id="sim-load" type="range" min="2" max="20" step="0.5" value="12">
+        <output class="sim-read" for="sim-load" data-out="load">12.0 kW</output>
+      </div>
+      <div class="sim-field">
+        <label class="sim-name" for="sim-droop">Droop</label>
+        <input class="sim-range" id="sim-droop" type="range" min="6" max="20" step="0.05" value="12.45">
+        <output class="sim-read" for="sim-droop" data-out="droop">12.45 mHz/kW</output>
+      </div>
+      <div class="sim-field">
+        <label class="sim-name" for="sim-ramp">Ramp limit</label>
+        <input class="sim-range" id="sim-ramp" type="range" min="4" max="40" step="1" value="10">
+        <output class="sim-read" for="sim-ramp" data-out="ramp">10 kW/s</output>
+      </div>
+      <p class="sim-actions">
+        <button type="button" class="sim-btn" data-sim-replay>Replay</button>
+        <span class="sim-hint">Tighten the ramp and watch the PI baseline overshoot.</span>
+      </p>
+    </div>
+
     <figcaption class="figure-caption">
       <span class="key key-main">Koopman&ndash;EDMDc MPC</span>
       <span class="key key-base">Droop + PI secondary</span>
-      <span class="figure-note">Frequency recovery after a load step, islanded four-bus testbed.</span>
+      <span class="figure-note">Frequency recovery after a load step, islanded microgrid.</span>
     </figcaption>
+
+    <table class="sim-metrics" data-sim-metrics hidden>
+      <caption class="sim-metrics-caption">Measured from the traces above</caption>
+      <thead>
+        <tr>
+          <th scope="col">Secondary</th>
+          <th scope="col">Nadir</th>
+          <th scope="col">Settling</th>
+          <th scope="col">Overshoot</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row" class="sim-who sim-who-main">Koopman MPC</th>
+          <td data-cell="mpc-nadir">&mdash;</td>
+          <td data-cell="mpc-settle">&mdash;</td>
+          <td data-cell="mpc-over">&mdash;</td>
+        </tr>
+        <tr>
+          <th scope="row" class="sim-who sim-who-base">Droop + PI</th>
+          <td data-cell="pi-nadir">&mdash;</td>
+          <td data-cell="pi-settle">&mdash;</td>
+          <td data-cell="pi-over">&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
   </figure>
 </section>
 
@@ -69,51 +119,175 @@ title: Home
         methods can actually be compared rather than just described.
       </p>
 
+      <!-- To add repository or paper links, drop an <a> into the matching
+           .entry-detail-inner below. Nothing here links out yet. -->
       <ul class="entries">
         <li class="entry">
-          <p class="entry-tag">Thesis core</p>
-          <h3 class="entry-title">Koopman&ndash;EDMDc model predictive control</h3>
-          <p class="entry-body">
-            A mode-aware lifting pipeline for droop-controlled grid-forming inverters:
-            sine and cosine embeddings of the power angle in grid-tied mode, angle
-            observables dropped when islanded. Feeding a velocity-form MPC with a
-            Hildreth QP gives offset-free tracking under input and rate constraints.
-          </p>
-          <p class="entry-meta">MATLAB &middot; Simulink &middot; EDMDc &middot; constrained QP</p>
+          <details id="koopman-mpc" name="research">
+            <summary class="entry-summary">
+              <span class="entry-tag">Thesis core</span>
+              <h3 class="entry-title">Koopman&ndash;EDMDc model predictive control</h3>
+              <span class="entry-body">
+                A mode-aware lifting pipeline for droop-controlled grid-forming inverters:
+                sine and cosine embeddings of the power angle in grid-tied mode, angle
+                observables dropped when islanded. Feeding a velocity-form MPC with a
+                Hildreth QP gives offset-free tracking under input and rate constraints.
+              </span>
+              <span class="entry-meta">MATLAB &middot; Simulink &middot; EDMDc &middot; constrained QP</span>
+              <span class="entry-cue" aria-hidden="true"></span>
+            </summary>
+            <div class="entry-detail">
+              <div class="entry-detail-inner">
+                <dl class="entry-spec">
+                  <dt>Plant</dt><dd>Islanded four-bus AC microgrid, droop-controlled grid-forming inverters</dd>
+                  <dt>Identification</dt><dd>Extended DMD with control, mode-dependent observable dictionary</dd>
+                  <dt>Controller</dt><dd>Velocity-form MPC, Hildreth QP, offset-free via integrator augmentation</dd>
+                  <dt>Constraints</dt><dd>Secondary set-point magnitude and ramp rate</dd>
+                </dl>
+                <p>
+                  The dictionary has to change with the operating mode. Grid-tied, the
+                  power angle carries real information and the sine/cosine pair earns its
+                  place. Islanded, there is no stiff reference to hold an angle against —
+                  keeping those observables leaves the regression badly conditioned rather
+                  than merely redundant, so they get dropped.
+                </p>
+                <p>
+                  The part that took the longest was not the lift. It was discovering that
+                  the identified model and the Simulink plant disagreed about actuation
+                  authority: the plant moves frequency by roughly 12.45 mHz per kW of
+                  secondary set-point, the identified model predicts about 12.97. A four
+                  percent gain error is small enough to look like noise and large enough to
+                  leave a standing offset, which is what the velocity form plus an
+                  integrating disturbance state is there to absorb.
+                </p>
+                <p>
+                  The plot at the top of this page is a reduced version of the same
+                  argument, small enough to run in a browser.
+                </p>
+              </div>
+            </div>
+          </details>
         </li>
 
         <li class="entry">
-          <p class="entry-tag">Baseline</p>
-          <h3 class="entry-title">Multi-agent RL for secondary control</h3>
-          <p class="entry-body">
-            A MADDPG implementation of distributed secondary control, replacing a
-            centralised DDPG critic with centralised training and decentralised
-            execution. The interesting case isn't nominal performance — it's what
-            happens when the communication link between agents drops.
-          </p>
-          <p class="entry-meta">Python &middot; PyTorch &middot; Gymnasium &middot; pandapower</p>
+          <details id="marl-secondary" name="research">
+            <summary class="entry-summary">
+              <span class="entry-tag">Baseline</span>
+              <h3 class="entry-title">Multi-agent RL for secondary control</h3>
+              <span class="entry-body">
+                A MADDPG implementation of distributed secondary control, replacing a
+                centralised DDPG critic with centralised training and decentralised
+                execution. The interesting case isn't nominal performance — it's what
+                happens when the communication link between agents drops.
+              </span>
+              <span class="entry-meta">Python &middot; PyTorch &middot; Gymnasium &middot; pandapower</span>
+              <span class="entry-cue" aria-hidden="true"></span>
+            </summary>
+            <div class="entry-detail">
+              <div class="entry-detail-inner">
+                <dl class="entry-spec">
+                  <dt>Algorithm</dt><dd>MADDPG — per-inverter actor, critic sees the joint observation during training only</dd>
+                  <dt>Environment</dt><dd>Gymnasium wrapper over the same islanded testbed</dd>
+                  <dt>Reward</dt><dd>Frequency and voltage regulation with an effort penalty</dd>
+                  <dt>Role</dt><dd>Learning-based baseline for the Koopman MPC comparison</dd>
+                </dl>
+                <p>
+                  A single centralised critic is the easy version of this problem and not
+                  the one a real microgrid has. Centralised training with decentralised
+                  execution keeps the deployment story honest: at run time each inverter
+                  acts on what it can actually measure locally.
+                </p>
+                <p>
+                  The comparison worth making is the degraded one. Nominal performance
+                  between a tuned MPC and a converged policy is close enough to be an
+                  argument about tuning effort. Drop the communication link between agents
+                  and the two approaches fail in genuinely different ways — the MPC
+                  degrades toward its constraint set, the learned policy degrades toward
+                  whatever it saw in training.
+                </p>
+              </div>
+            </div>
+          </details>
         </li>
 
         <li class="entry">
-          <p class="entry-tag">Comparison track</p>
-          <h3 class="entry-title">Physics-informed neural control</h3>
-          <p class="entry-body">
-            Two strands: a PINC-style distributed secondary voltage controller for a
-            low-voltage inverter microgrid, and a physics-informed predictor driving MPC
-            on a DC&ndash;DC buck converter feeding a constant power load.
-          </p>
-          <p class="entry-meta">PINN &middot; PINC &middot; averaged CCM model</p>
+          <details id="physics-informed" name="research">
+            <summary class="entry-summary">
+              <span class="entry-tag">Comparison track</span>
+              <h3 class="entry-title">Physics-informed neural control</h3>
+              <span class="entry-body">
+                Two strands: a PINC-style distributed secondary voltage controller for a
+                low-voltage inverter microgrid, and a physics-informed predictor driving MPC
+                on a DC&ndash;DC buck converter feeding a constant power load.
+              </span>
+              <span class="entry-meta">PINN &middot; PINC &middot; averaged CCM model</span>
+              <span class="entry-cue" aria-hidden="true"></span>
+            </summary>
+            <div class="entry-detail">
+              <div class="entry-detail-inner">
+                <dl class="entry-spec">
+                  <dt>Strand one</dt><dd>PINC distributed secondary voltage control, low-voltage inverter microgrid</dd>
+                  <dt>Strand two</dt><dd>PINN predictor inside an MPC loop, buck converter with constant power load</dd>
+                  <dt>Physics</dt><dd>Averaged continuous-conduction-mode model as the residual term</dd>
+                  <dt>Training</dt><dd>DAgger-style aggregation against a supervising controller</dd>
+                </dl>
+                <p>
+                  A constant power load is the interesting part of the buck problem: its
+                  incremental resistance is negative, so the small-signal system is
+                  destabilising exactly where a naive linear predictor is most confident.
+                  Putting the averaged model in as a physics residual is what stops the
+                  network from learning a comfortable, wrong linearisation.
+                </p>
+                <p>
+                  Two findings from the MPC loop worth recording. Asking the controller to
+                  track two outputs at once collapsed the bus rather than trading the two
+                  off — the single-output formulation is the one that holds. And the
+                  achievable step excursion is set by the LC filter, not by the controller,
+                  which is a useful thing to establish before blaming a predictor for
+                  tracking error it was never able to remove.
+                </p>
+              </div>
+            </div>
+          </details>
         </li>
 
         <li class="entry">
-          <p class="entry-tag">Side build</p>
-          <h3 class="entry-title">CircuitLab, a browser circuit simulator</h3>
-          <p class="entry-body">
-            Modified nodal analysis with companion models, running entirely client-side,
-            with a phosphor-style oscilloscope readout. Verified against buck, boost,
-            RC, RLC, and half-wave rectifier circuits.
-          </p>
-          <p class="entry-meta">React &middot; MNA &middot; numerical integration</p>
+          <details id="circuitlab" name="research">
+            <summary class="entry-summary">
+              <span class="entry-tag">Side build</span>
+              <h3 class="entry-title">CircuitLab, a browser circuit simulator</h3>
+              <span class="entry-body">
+                Modified nodal analysis with companion models, running entirely client-side,
+                with a phosphor-style oscilloscope readout. Verified against buck, boost,
+                RC, RLC, and half-wave rectifier circuits.
+              </span>
+              <span class="entry-meta">React &middot; MNA &middot; numerical integration</span>
+              <span class="entry-cue" aria-hidden="true"></span>
+            </summary>
+            <div class="entry-detail">
+              <div class="entry-detail-inner">
+                <dl class="entry-spec">
+                  <dt>Formulation</dt><dd>Modified nodal analysis, companion models for reactive elements</dd>
+                  <dt>Nonlinearity</dt><dd>Newton iteration per time step for diodes and switches</dd>
+                  <dt>Runtime</dt><dd>Entirely client-side — no solver on a server anywhere</dd>
+                  <dt>Verified against</dt><dd>Buck, boost, RC, RLC, half-wave rectifier</dd>
+                </dl>
+                <p>
+                  Companion models turn each capacitor and inductor into a conductance in
+                  parallel with a current source that carries the previous step's state, so
+                  every time step reduces to the same linear solve. The switching elements
+                  are where it stops being tidy: a hard diode model makes the Newton loop
+                  chatter near the conduction boundary.
+                </p>
+                <p>
+                  The verification set is deliberately boring. Circuits with closed-form or
+                  well-known answers are the only ones that tell you the integrator is
+                  right, and a rectifier is the cheapest test that exercises the nonlinear
+                  path at all.
+                </p>
+              </div>
+            </div>
+          </details>
         </li>
       </ul>
     </div>

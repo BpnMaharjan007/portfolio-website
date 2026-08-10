@@ -13,12 +13,71 @@
   --signal: #1f3fbf;
   --signal-deep: #16308f;
 
+  /* Derived surfaces — kept as tokens so the dark theme is a token swap only. */
+  --graticule: rgba(18, 24, 31, 0.045);
+  --wash: rgba(18, 24, 31, 0.06);
+  --code-bg: #12181f;
+  --code-ink: #e8ecf1;
+  --on-signal: #ffffff;
+
   --display: "Archivo", system-ui, sans-serif;
   --body: "Newsreader", Georgia, serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
 
   --wrap: 1080px;
   --gutter: 32px;
+}
+
+/* Dark theme. Declared twice on purpose: once for visitors who never touch the
+   toggle (system preference), once for an explicit choice, which must win in
+   both directions. Every colour above has its base value on bare :root, so
+   nothing depends on a media query being matched. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0e1216;
+    --band: #131920;
+    --surface: #171e26;
+    --ink: #e6ecf2;
+    --ink-soft: #9dabb8;
+    --ink-faint: #6f7d8a;
+    --rule: #28323d;
+    --rule-soft: #1f2831;
+    --signal: #7f9cff;
+    --signal-deep: #a6bcff;
+
+    --graticule: rgba(230, 236, 242, 0.04);
+    --wash: rgba(230, 236, 242, 0.08);
+    --code-bg: #0a0e12;
+    --code-ink: #dbe3ea;
+    --on-signal: #0e1216;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #0e1216;
+  --band: #131920;
+  --surface: #171e26;
+  --ink: #e6ecf2;
+  --ink-soft: #9dabb8;
+  --ink-faint: #6f7d8a;
+  --rule: #28323d;
+  --rule-soft: #1f2831;
+  --signal: #7f9cff;
+  --signal-deep: #a6bcff;
+
+  --graticule: rgba(230, 236, 242, 0.04);
+  --wash: rgba(230, 236, 242, 0.08);
+  --code-bg: #0a0e12;
+  --code-ink: #dbe3ea;
+  --on-signal: #0e1216;
+}
+
+/* Suppress transitions during a theme switch so the page changes in one frame
+   instead of every element easing independently. */
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition: none !important;
 }
 
 /* ---------------------------------------------------------------
@@ -33,13 +92,14 @@ body {
   color: var(--ink);
   background-color: var(--ground);
   background-image:
-    linear-gradient(to right, rgba(18, 24, 31, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(18, 24, 31, 0.045) 1px, transparent 1px);
+    linear-gradient(to right, var(--graticule) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--graticule) 1px, transparent 1px);
   background-size: 28px 28px;
   font-family: var(--body);
   font-size: 18px;
   line-height: 1.65;
   font-optical-sizing: auto;
+  color-scheme: light dark;
 }
 
 a { color: var(--signal); text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -137,6 +197,7 @@ img, svg { max-width: 100%; }
 
 .nav {
   display: flex;
+  align-items: baseline;
   gap: 26px;
 }
 
@@ -153,6 +214,37 @@ img, svg { max-width: 100%; }
 .nav a:hover {
   color: var(--ink);
   border-bottom-color: var(--signal);
+}
+
+/* ---------------------------------------------------------------
+   Theme toggle — injected by JS, so it never appears without a
+   working handler behind it.
+   --------------------------------------------------------------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  align-self: center;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-toggle:hover { color: var(--signal); border-color: var(--signal); }
+.theme-toggle svg { width: 15px; height: 15px; display: block; }
+.theme-toggle .icon-moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: none; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: block; }
 }
 
 /* ---------------------------------------------------------------
@@ -198,12 +290,12 @@ img, svg { max-width: 100%; }
   letter-spacing: 0.04em;
   text-decoration: none;
   padding: 11px 20px;
-  color: var(--surface);
+  color: var(--on-signal);
   background: var(--signal);
   border: 1px solid var(--signal);
   transition: background 0.15s ease, color 0.15s ease;
 }
-.btn:hover { background: var(--signal-deep); color: var(--surface); }
+.btn:hover { background: var(--signal-deep); border-color: var(--signal-deep); color: var(--on-signal); }
 
 .btn-quiet {
   color: var(--ink);
@@ -235,8 +327,10 @@ img, svg { max-width: 100%; }
 .plot .trace-base { stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 5 4; }
 .plot .trace-main { stroke: var(--signal); stroke-width: 2.25; }
 
+/* Only for visitors without JS. When the simulation is live it drives the
+   draw itself, against a path whose length it actually knows. */
 @media (prefers-reduced-motion: no-preference) {
-  .plot .trace-main {
+  html:not(.js) .plot .trace-main {
     stroke-dasharray: 560;
     stroke-dashoffset: 560;
     animation: draw 1.5s 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -272,6 +366,166 @@ img, svg { max-width: 100%; }
   letter-spacing: 0.02em;
   color: var(--ink-faint);
 }
+
+/* ---------------------------------------------------------------
+   Simulation controls — revealed by JS once the sim is wired, so
+   the figure never shows dead inputs.
+   --------------------------------------------------------------- */
+.sim-controls[hidden],
+.sim-metrics[hidden] { display: none; }
+
+.sim-controls {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule-soft);
+  display: grid;
+  gap: 10px;
+}
+
+.sim-field {
+  display: grid;
+  grid-template-columns: 84px 1fr 100px;
+  align-items: center;
+  gap: 12px;
+}
+
+.sim-name,
+.sim-read,
+.sim-hint,
+.sim-btn,
+.sim-metrics {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.sim-name {
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.sim-read {
+  text-align: right;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Track and thumb have to be styled per-engine; there is no shorthand
+   that lands on both WebKit and Gecko. */
+.sim-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.sim-range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--rule);
+}
+.sim-range::-moz-range-track {
+  height: 2px;
+  background: var(--rule);
+}
+
+.sim-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  margin-top: -5.5px;
+  border: none;
+  border-radius: 50%;
+  background: var(--signal);
+}
+.sim-range::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border: none;
+  border-radius: 50%;
+  background: var(--signal);
+}
+
+.sim-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--wash); }
+.sim-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--wash); }
+
+.sim-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 4px 0 0;
+}
+
+.sim-btn {
+  padding: 7px 14px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.sim-btn:hover { color: var(--signal); border-color: var(--signal); }
+
+.sim-hint {
+  color: var(--ink-faint);
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.sim-metrics {
+  width: 100%;
+  margin-top: 16px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-metrics-caption {
+  text-align: left;
+  padding-bottom: 8px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sim-metrics th,
+.sim-metrics td {
+  padding: 7px 0;
+  text-align: right;
+  font-weight: 400;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.sim-metrics thead th {
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+.sim-metrics tbody tr:last-child th,
+.sim-metrics tbody tr:last-child td { border-bottom: none; }
+
+.sim-who {
+  text-align: left;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  padding-left: 23px;
+  position: relative;
+}
+
+.sim-who::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 16px;
+  border-top-width: 2px;
+  border-top-style: solid;
+}
+.sim-who-main::before { border-top-color: var(--signal); }
+.sim-who-base::before { border-top-color: var(--ink-faint); border-top-style: dashed; }
 
 /* ---------------------------------------------------------------
    Sections
@@ -353,6 +607,119 @@ img, svg { max-width: 100%; }
 }
 
 .entry-meta { margin: 0; }
+
+/* The tag/body/meta are spans inside <summary> so the whole card can be the
+   toggle while the markup stays valid — they need block layout back. */
+.entry-tag,
+.entry-body,
+.entry-meta { display: block; }
+
+.entry > details { border: 0; }
+
+.entry-summary {
+  display: block;
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  padding-right: 34px;
+}
+.entry-summary::-webkit-details-marker { display: none; }
+.entry-summary:focus-visible { outline: 2px solid var(--signal); outline-offset: 6px; }
+
+.entry-summary::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid var(--ink-faint);
+  border-bottom: 1.5px solid var(--ink-faint);
+  transform: rotate(45deg);
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+.entry:hover .entry-summary::after { border-color: var(--signal); }
+
+/* Keyed off [open] rather than the JS class so the affordance is still
+   correct for a visitor with no JavaScript. */
+details[open] .entry-summary::after { transform: rotate(-135deg); }
+
+.entry.is-open { border-left-color: var(--signal); }
+
+.entry-cue {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--signal);
+}
+.entry-cue::before { content: "Read more"; }
+details[open] .entry-cue { color: var(--ink-faint); }
+details[open] .entry-cue::before { content: "Close"; }
+
+/* Height is animated by JS; overflow has to be clipped for that to read. */
+.entry-detail { overflow: hidden; }
+
+.entry-detail-inner {
+  padding-top: 22px;
+  margin-top: 20px;
+  border-top: 1px solid var(--rule);
+  max-width: 42em;
+}
+
+.entry-detail-inner p {
+  margin: 0 0 1.1em;
+  color: var(--ink-soft);
+  font-size: 17px;
+}
+.entry-detail-inner p:last-child { margin-bottom: 0; }
+
+.entry-spec {
+  margin: 0 0 20px;
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  gap: 6px 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.entry-spec dt {
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+.entry-spec dd {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------
+   Reveal on scroll — the class is only added by JS, and only when
+   the visitor has not asked for reduced motion.
+   --------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.55s ease var(--reveal-delay, 0ms),
+    transform 0.55s cubic-bezier(0.22, 0.68, 0.32, 1) var(--reveal-delay, 0ms);
+}
+.reveal.is-revealed { opacity: 1; transform: none; }
+
+/* .entry already owns a transition; re-state it here or the reveal rule
+   replaces it and the hover shift becomes instant. */
+.entry.reveal {
+  transition:
+    opacity 0.55s ease var(--reveal-delay, 0ms),
+    transform 0.55s cubic-bezier(0.22, 0.68, 0.32, 1) var(--reveal-delay, 0ms),
+    border-left-color 0.18s ease,
+    padding-left 0.18s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
 
 /* ---------------------------------------------------------------
    Post list
@@ -460,13 +827,13 @@ img, svg { max-width: 100%; }
 .prose code {
   font-family: var(--mono);
   font-size: 0.84em;
-  background: rgba(18, 24, 31, 0.06);
+  background: var(--wash);
   padding: 2px 5px;
 }
 
 .prose pre {
-  background: var(--ink);
-  color: #e8ecf1;
+  background: var(--code-bg);
+  color: var(--code-ink);
   padding: 20px 22px;
   overflow-x: auto;
   font-size: 14px;
@@ -541,4 +908,16 @@ img, svg { max-width: 100%; }
   .entry:hover { padding-left: 22px; }
   .prose-lede { font-size: 19px; }
   .prose { font-size: 18px; }
+
+  /* Rows are explicit: with auto-placement the full-width slider pushes the
+     readout onto a third row, away from the label it belongs to. */
+  .sim-field { grid-template-columns: 1fr auto; gap: 2px 12px; }
+  .sim-name { grid-column: 1; grid-row: 1; }
+  .sim-read { grid-column: 2; grid-row: 1; }
+  .sim-range { grid-column: 1 / -1; grid-row: 2; }
+  .sim-metrics { font-size: 11px; }
+  .sim-who { padding-left: 0; }
+  .sim-who::before { display: none; }
+  .entry-spec { grid-template-columns: 1fr; gap: 2px; }
+  .entry-spec dd { margin-bottom: 8px; }
 }
