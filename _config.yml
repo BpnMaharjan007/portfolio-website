@@ -35,6 +35,11 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  # Figure sources. Jekyll copies unrecognised top-level directories into the
+  # build, which would publish the .blend and the generator alongside the site
+  # and let the sitemap index them. The generated SVG lives in _includes and is
+  # inlined at build time, so nothing here is needed at runtime.
+  - blender
 
 defaults:
   - scope:
