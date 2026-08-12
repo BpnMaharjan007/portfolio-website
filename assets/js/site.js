@@ -40,13 +40,21 @@
     }
     label();
 
+    /* Ordinary pages have their transitions suppressed across a switch, so
+       the page changes in one frame instead of every element easing on its
+       own schedule. The valley page is the exception: its whole point is
+       that the switch is a sunset, and suppressing transitions would cut
+       straight to the other scene. */
+    var crossfades = document.body.classList.contains("valley");
+
     btn.addEventListener("click", function () {
       var next = currentTheme() === "dark" ? "light" : "dark";
-      root.classList.add("theme-switching");
+      if (!crossfades) root.classList.add("theme-switching");
       root.setAttribute("data-theme", next);
       try { localStorage.setItem("theme", next); } catch (e) { /* non-fatal */ }
       label();
       document.dispatchEvent(new CustomEvent("themechange", { detail: { theme: next } }));
+      if (crossfades) return;
       window.requestAnimationFrame(function () {
         window.requestAnimationFrame(function () { root.classList.remove("theme-switching"); });
       });

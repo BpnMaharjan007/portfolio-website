@@ -1,0 +1,1180 @@
+/* ---------------------------------------------------------------
+   Valley — art direction for the About page.
+
+   Loaded only where the page front matter sets `valley: true`. The
+   palette is taken from Newar building materials and is lit two ways:
+   dawn over the valley in the light theme, night in the dark one. The
+   site's own theme toggle switches between them, so this page follows
+   the same control as everything else.
+
+   Every colour in the scene is a token here — the SVG carries almost no
+   literal colour of its own, including its gradient stops, which CSS
+   overrides through the presentation attributes. Two further tokens,
+   --v-night and --v-day, are 1/0 flags: things that exist in only one
+   of the two scenes (stars, the moon, lit windows, lamp glow) multiply
+   their opacity by one of them rather than being switched on and off in
+   a third place.
+
+   MAINTENANCE: the night palette is written twice, once for visitors
+   who never touch the toggle and once for an explicit choice, matching
+   how style.css declares its dark theme. The two night blocks must stay
+   identical — change a night colour in one and you must change it in
+   the other. Morning values live on the bare body.valley rule.
+   --------------------------------------------------------------- */
+/* Registering the two gate flags as numbers is what makes the switch a
+   sunset rather than a cut. An unregistered custom property is an untyped
+   token stream and cannot be interpolated; a registered <number> can, so a
+   transition on --v-night drives every calc() that reads it — including the
+   ones inside @keyframes, which re-resolve as the value moves. That is how
+   the stars, the lit windows and the lamp glows come up gradually while
+   their own flicker keeps running underneath.
+
+   Where @property is not supported the flags stay untyped, the transition
+   is simply dropped, and the page switches in one frame as it did before. */
+@property --v-night {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --v-day {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+body.valley {
+  --display: "Martel", Georgia, serif;
+  --body: "Karla", system-ui, sans-serif;
+
+  /* ---- Morning: dawn, with the sun still in the Himalayan notch ---- */
+  --v-night: 0;
+  --v-day: 1;
+
+  /* Materials, in daylight */
+  --clay: #a85c3e;
+  --clay-deep: #8a4a30;
+  --timber: #55392c;
+  --timber-soft: #7a5a44;
+  --gilt: #e8b73f;
+  --gilt-deep: #b98c2e;
+  --sindoor: #c4432f;
+  --mist: #fdf8ee;
+  --lamp: #f7c579;
+
+  /* Sky and light */
+  --v-sky-1: #3f6fa8;
+  --v-sky-2: #6f9ac6;
+  --v-sky-3: #a8c2d6;
+  --v-sky-4: #e4bb8d;
+  --v-sky-5: #f7d9ab;
+  --v-orb: #fff4d6;
+  --v-orb-mark: #ffe4b0;
+  --v-orb-mark-o: 0;
+  --v-orbglow-1: #fff1cf;
+  --v-orbglow-o1: 0.70;
+  --v-orbglow-2: #ffd79a;
+  --v-orbglow-o2: 0.28;
+  --v-orbglow-3: #f5b46e;
+  --v-star: #e8ecff;
+  /* Night throws the city's own light back into the haze; morning is the
+     sun doing the same thing from the other side of the ridge. */
+  --v-cast-1: #ffe3bd;
+  --v-cast-o1: 0.34;
+  --v-cast-2: #f0c79a;
+  --v-cast-o2: 0.14;
+  --v-cast-3: #e8bb8f;
+  --v-gnd-1: #a08d78;
+  --v-gnd-2: #8a7864;
+  --v-gnd-o2: 0.30;
+  --v-gnd-3: #6f5f4e;
+  --v-gnd-o3: 0.55;
+  /* The fog is the point of a valley morning, so it is heavier than at night. */
+  --v-fog: #ffffff;
+  --v-fog-o: 0.55;
+
+  /* Terrain. Aerial perspective: the Himalaya is furthest and so the
+     palest and least saturated, the near hills darkest and greenest. */
+  --v-rim: #93a6bd;
+  --v-snow: #ffd9c2;
+  --v-snow-o: 0.95;
+  --v-hill-far: #8ea095;
+  --v-hill-near: #6d8073;
+  --v-hill-stupa: #5f7264;
+
+  /* Swayambhunath. The painted face is the same paint in both scenes. */
+  --v-dome: #f2ece2;
+  --v-stone: #cfc5b6;
+  --v-eye-white: #fdf9f0;
+  --v-eye-line: #16214a;
+  --v-iris: #1e2f6e;
+  --v-pupil: #0b0c18;
+  --v-lid: #2b4a96;
+  --v-flagline: #8a8296;
+
+  /* Pagoda */
+  --v-pg-plinth: #9a8f80;
+  --v-pg-stair: #a99d8c;
+  --v-pg-step: #7d7263;
+  --v-pg-guardian: #6e6455;
+  --v-pg-roof: #7d4a35;
+  --v-pg-strut: #6a4030;
+  --v-pg-post: #5c3c2e;
+  --v-pg-cornice: #4a3226;
+  --v-pg-course: #5d3527;
+  /* A doorway is a lamp at night and a dark hole by day — same shape,
+     so it changes colour rather than being switched off. */
+  --v-opening: #2a1c18;
+  --v-opening-o: 0.90;
+
+  /* Townhouses */
+  --v-h-roof: #8f5540;
+  --v-h-tile: #6d3f2f;
+  --v-h-course: #6f3b28;
+  --v-h-reveal: #2b1d18;
+  --v-h-lattice: #4a3225;
+  --v-h-balcony: #6b4a36;
+
+  /* Street lamps, unlit — the glass takes the sky instead of a flame */
+  --v-lp-metal: #6b5138;
+  --v-lp-collar: #7d6044;
+  --v-lp-base: #5a4229;
+  --v-lp-glass: #cfd6da;
+
+  /* Chargers, cars, birds */
+  --v-ev-base: #8a8a8a;
+  --v-ev-body: #d8d8da;
+  --v-ev-head: #ececed;
+  --v-ev-screen: #17494a;
+  --v-ev-bolt: #7fe3c0;
+  --v-ev-led: #1a8f6e;
+  --v-ev-charge: #14806a;
+  --v-ev-cable: #4a4a4e;
+  --v-car-body: #4a5f7d;
+  --v-car-glass: #9fb4c8;
+  --v-car-wheel: #2a2a30;
+  --v-car-tail: #c4432f;
+  --v-bird: #3a3a46;
+
+  /* Page chrome over the scene */
+  --v-panel: rgba(250, 245, 236, 0.93);
+  --v-panel-blur: rgba(250, 245, 236, 0.86);
+  --v-panel-0: rgba(250, 245, 236, 0);
+  --v-scrim-top: rgba(250, 245, 236, 0.95);
+  --v-scrim-mid: rgba(250, 245, 236, 0.72);
+  --v-scrim-0: rgba(250, 245, 236, 0);
+  --v-scrim-foot: rgba(250, 245, 236, 0.88);
+  --v-hero-ink: #2a1e16;
+  --v-hero-ink-soft: #4a3a2e;
+  --v-hero-accent: #8a4a12;
+  /* Dark type over a bright sky wants a light halo, not a drop shadow. */
+  --v-hero-shadow: rgba(255, 247, 232, 0.92);
+  --v-hero-scrim: rgba(250, 245, 236, 0.72);
+  --v-hero-scrim-0: rgba(250, 245, 236, 0);
+  --v-mark: #9a5518;
+  --v-focus: #8a4a12;
+
+  /* Site tokens, restated in valley terms so the masthead, footer and
+     shared .section rules follow without being rewritten. */
+  --ground: #f0e8db;
+  --band: #e8dfd0;
+  --surface: #fbf6ec;
+  --ink: #2a1e16;
+  --ink-soft: #58453a;
+  /* Darker than the site's own light --ink-faint, which sits at about 2.9:1.
+     The footer line and the wordmark subtitle use this, and both are normal
+     body size, so it is held at 4.5:1 against the reader panel. */
+  --ink-faint: #806b5c;
+  --rule: #d6c6b0;
+  --rule-soft: #e6dac8;
+  --signal: #9a5518;
+  --signal-deep: #7c4210;
+  --graticule: rgba(42, 30, 22, 0.03);
+  --wash: rgba(42, 30, 22, 0.06);
+  --on-signal: #fbf6ec;
+
+  background-color: var(--ground);
+  color: var(--ink);
+}
+
+/* ---- Night. Duplicated deliberately; see MAINTENANCE above. ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body.valley {
+    --v-night: 1;
+    --v-day: 0;
+
+    --clay: #7c4230;
+    --clay-deep: #5e2d20;
+    --timber: #3a2a24;
+    --timber-soft: #5b4033;
+    --gilt: #d9a441;
+    --gilt-deep: #a87a2c;
+    --sindoor: #b8402f;
+    --mist: #ece4d6;
+    --lamp: #f7c579;
+
+    --v-sky-1: #080a1c;
+    --v-sky-2: #101433;
+    --v-sky-3: #1d1d47;
+    --v-sky-4: #33244d;
+    --v-sky-5: #5a3450;
+    --v-orb: #eef1ff;
+    --v-orb-mark: #ccd3f0;
+    --v-orb-mark-o: 0.55;
+    --v-orbglow-1: #dfe6ff;
+    --v-orbglow-o1: 0.50;
+    --v-orbglow-2: #b9c4f0;
+    --v-orbglow-o2: 0.16;
+    --v-orbglow-3: #8e9ad6;
+    --v-star: #e8ecff;
+    --v-cast-1: #c9803f;
+    --v-cast-o1: 0.30;
+    --v-cast-2: #8a4f39;
+    --v-cast-o2: 0.10;
+    --v-cast-3: #5a3450;
+    --v-gnd-1: #0d0a20;
+    --v-gnd-2: #0a0819;
+    --v-gnd-o2: 0.78;
+    --v-gnd-3: #070614;
+    --v-gnd-o3: 1;
+    --v-fog: #9fb0d8;
+    --v-fog-o: 0.30;
+
+    --v-rim: #1b1f42;
+    --v-snow: #aeb9dd;
+    --v-snow-o: 0.82;
+    --v-hill-far: #131632;
+    --v-hill-near: #0e1128;
+    --v-hill-stupa: #10132c;
+
+    --v-dome: #cfc9c2;
+    --v-stone: #a8a199;
+    --v-eye-white: #f5efe3;
+    --v-eye-line: #16214a;
+    --v-iris: #1e2f6e;
+    --v-pupil: #0b0c18;
+    --v-lid: #2b4a96;
+    --v-flagline: #4a4670;
+
+    --v-pg-plinth: #241f3a;
+    --v-pg-stair: #2c2545;
+    --v-pg-step: #191430;
+    --v-pg-guardian: #1a1530;
+    --v-pg-roof: #33201d;
+    --v-pg-strut: #3a2620;
+    --v-pg-post: #2e2028;
+    --v-pg-cornice: #2a1c22;
+    --v-pg-course: #1e1210;
+    --v-opening: #f7c579;
+    --v-opening-o: 0.72;
+
+    --v-h-roof: #2e1c1a;
+    --v-h-tile: #1c100f;
+    --v-h-course: #3d1d16;
+    --v-h-reveal: #0b0819;
+    --v-h-lattice: #2a1d19;
+    --v-h-balcony: #402d24;
+
+    --v-lp-metal: #4a3524;
+    --v-lp-collar: #5c4330;
+    --v-lp-base: #3b2a1d;
+    --v-lp-glass: #201a2e;
+
+    --v-ev-base: #191430;
+    --v-ev-body: #2b2442;
+    --v-ev-head: #342c4e;
+    --v-ev-screen: #123a3a;
+    --v-ev-bolt: #7fe3c0;
+    --v-ev-led: #6fd8b4;
+    --v-ev-charge: #7fe3c0;
+    --v-ev-cable: #191430;
+    --v-car-body: #1b1734;
+    --v-car-glass: #2e2a52;
+    --v-car-wheel: #0d0a1c;
+    --v-car-tail: #b8402f;
+    --v-bird: #2b2748;
+
+    --v-panel: rgba(8, 10, 28, 0.93);
+    --v-panel-blur: rgba(8, 10, 28, 0.86);
+    --v-panel-0: rgba(8, 10, 28, 0);
+    --v-scrim-top: rgba(8, 10, 28, 0.82);
+    --v-scrim-mid: rgba(8, 10, 28, 0.33);
+    --v-scrim-0: rgba(8, 10, 28, 0);
+    --v-scrim-foot: rgba(8, 10, 28, 0.86);
+    --v-hero-ink: #ece4d6;
+    --v-hero-ink-soft: #b3adc4;
+    --v-hero-accent: #d9a441;
+    --v-hero-shadow: rgba(8, 10, 28, 0.85);
+    /* Not transparent, though the night scene is already dark here. Giving
+       the title a real ground in both scenes is what lets it stay legible
+       through the crossfade: the wash goes light-to-dark on its own short
+       schedule instead of thinning away to nothing while the scene behind
+       it is still only half dark. It settles the lit windows down a bit. */
+    --v-hero-scrim: rgba(8, 10, 28, 0.5);
+    --v-hero-scrim-0: rgba(8, 10, 28, 0);
+    --v-mark: #d9a441;
+    --v-focus: #d9a441;
+
+    --ground: #080a1c;
+    --band: #0d1026;
+    --surface: #10132b;
+    --ink: #ece4d6;
+    --ink-soft: #b3adc4;
+    --ink-faint: #8781a0;
+    --rule: #262a4e;
+    --rule-soft: #1c1f3d;
+    --signal: #e0a95a;
+    --signal-deep: #f2c684;
+    --graticule: rgba(236, 228, 214, 0.02);
+    --wash: rgba(236, 228, 214, 0.06);
+    --on-signal: #080a1c;
+  }
+}
+
+:root[data-theme="dark"] body.valley {
+  --v-night: 1;
+  --v-day: 0;
+
+  --clay: #7c4230;
+  --clay-deep: #5e2d20;
+  --timber: #3a2a24;
+  --timber-soft: #5b4033;
+  --gilt: #d9a441;
+  --gilt-deep: #a87a2c;
+  --sindoor: #b8402f;
+  --mist: #ece4d6;
+  --lamp: #f7c579;
+
+  --v-sky-1: #080a1c;
+  --v-sky-2: #101433;
+  --v-sky-3: #1d1d47;
+  --v-sky-4: #33244d;
+  --v-sky-5: #5a3450;
+  --v-orb: #eef1ff;
+  --v-orb-mark: #ccd3f0;
+  --v-orb-mark-o: 0.55;
+  --v-orbglow-1: #dfe6ff;
+  --v-orbglow-o1: 0.50;
+  --v-orbglow-2: #b9c4f0;
+  --v-orbglow-o2: 0.16;
+  --v-orbglow-3: #8e9ad6;
+  --v-star: #e8ecff;
+  --v-cast-1: #c9803f;
+  --v-cast-o1: 0.30;
+  --v-cast-2: #8a4f39;
+  --v-cast-o2: 0.10;
+  --v-cast-3: #5a3450;
+  --v-gnd-1: #0d0a20;
+  --v-gnd-2: #0a0819;
+  --v-gnd-o2: 0.78;
+  --v-gnd-3: #070614;
+  --v-gnd-o3: 1;
+  --v-fog: #9fb0d8;
+  --v-fog-o: 0.30;
+
+  --v-rim: #1b1f42;
+  --v-snow: #aeb9dd;
+  --v-snow-o: 0.82;
+  --v-hill-far: #131632;
+  --v-hill-near: #0e1128;
+  --v-hill-stupa: #10132c;
+
+  --v-dome: #cfc9c2;
+  --v-stone: #a8a199;
+  --v-eye-white: #f5efe3;
+  --v-eye-line: #16214a;
+  --v-iris: #1e2f6e;
+  --v-pupil: #0b0c18;
+  --v-lid: #2b4a96;
+  --v-flagline: #4a4670;
+
+  --v-pg-plinth: #241f3a;
+  --v-pg-stair: #2c2545;
+  --v-pg-step: #191430;
+  --v-pg-guardian: #1a1530;
+  --v-pg-roof: #33201d;
+  --v-pg-strut: #3a2620;
+  --v-pg-post: #2e2028;
+  --v-pg-cornice: #2a1c22;
+  --v-pg-course: #1e1210;
+  --v-opening: #f7c579;
+  --v-opening-o: 0.72;
+
+  --v-h-roof: #2e1c1a;
+  --v-h-tile: #1c100f;
+  --v-h-course: #3d1d16;
+  --v-h-reveal: #0b0819;
+  --v-h-lattice: #2a1d19;
+  --v-h-balcony: #402d24;
+
+  --v-lp-metal: #4a3524;
+  --v-lp-collar: #5c4330;
+  --v-lp-base: #3b2a1d;
+  --v-lp-glass: #201a2e;
+
+  --v-ev-base: #191430;
+  --v-ev-body: #2b2442;
+  --v-ev-head: #342c4e;
+  --v-ev-screen: #123a3a;
+  --v-ev-bolt: #7fe3c0;
+  --v-ev-led: #6fd8b4;
+  --v-ev-charge: #7fe3c0;
+  --v-ev-cable: #191430;
+  --v-car-body: #1b1734;
+  --v-car-glass: #2e2a52;
+  --v-car-wheel: #0d0a1c;
+  --v-car-tail: #b8402f;
+  --v-bird: #2b2748;
+
+  --v-panel: rgba(8, 10, 28, 0.93);
+  --v-panel-blur: rgba(8, 10, 28, 0.86);
+  --v-panel-0: rgba(8, 10, 28, 0);
+  --v-scrim-top: rgba(8, 10, 28, 0.82);
+  --v-scrim-mid: rgba(8, 10, 28, 0.33);
+  --v-scrim-0: rgba(8, 10, 28, 0);
+  --v-scrim-foot: rgba(8, 10, 28, 0.86);
+  --v-hero-ink: #ece4d6;
+  --v-hero-ink-soft: #b3adc4;
+  --v-hero-accent: #d9a441;
+  --v-hero-shadow: rgba(8, 10, 28, 0.85);
+  /* Not transparent, though the night scene is already dark here. Giving
+     the title a real ground in both scenes is what lets it stay legible
+     through the crossfade: the wash goes light-to-dark on its own short
+     schedule instead of thinning away to nothing while the scene behind it
+     is still only half dark. It settles the lit windows down a little too. */
+  --v-hero-scrim: rgba(8, 10, 28, 0.5);
+  --v-hero-scrim-0: rgba(8, 10, 28, 0);
+  --v-mark: #d9a441;
+  --v-focus: #d9a441;
+
+  --ground: #080a1c;
+  --band: #0d1026;
+  --surface: #10132b;
+  --ink: #ece4d6;
+  --ink-soft: #b3adc4;
+  --ink-faint: #8781a0;
+  --rule: #262a4e;
+  --rule-soft: #1c1f3d;
+  --signal: #e0a95a;
+  --signal-deep: #f2c684;
+  --graticule: rgba(236, 228, 214, 0.02);
+  --wash: rgba(236, 228, 214, 0.06);
+  --on-signal: #080a1c;
+}
+
+body.valley .wordmark-name { font-family: var(--display); }
+
+/* The masthead and footer sit over the scene, so they carry no fill of
+   their own — only enough shading to keep their text legible. */
+body.valley .masthead {
+  position: relative;
+  z-index: 2;
+  /* Everywhere else the masthead is a centred column, and its background is
+     the page's own. Here it carries a scrim over the scene, so it has to run
+     the full width or it reads as a floating slab with sky either side. The
+     padding reproduces what the centred column gave, so nothing moves. */
+  max-width: none;
+  padding-left: max(var(--gutter), calc((100% - var(--wrap)) / 2 + var(--gutter)));
+  padding-right: max(var(--gutter), calc((100% - var(--wrap)) / 2 + var(--gutter)));
+}
+
+/* The scrim runs 80px past the foot of the masthead rather than stopping with
+   it. Ending it at the border left the ramp only ~35px to reach zero, which
+   the eye reads as an edge — a pale slab laid on the sky. Behind the content
+   but above the scene: .masthead is a stacking context of its own, so a
+   negative z-index here cannot fall through to the page below. */
+body.valley .masthead::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -80px 0;
+  z-index: -1;
+  pointer-events: none;
+  /* Three stops: the morning sky is bright at the top of the frame but not
+     bright enough to carry dark nav type on its own, so the scrim is still
+     doing work where the wordmark's second line sits. At night the mid stop
+     is set to what a plain two-stop ramp would have given anyway. */
+  background: linear-gradient(
+    to bottom,
+    var(--v-scrim-top) 0,
+    var(--v-scrim-mid) 42%,
+    var(--v-scrim-0) 100%);
+}
+body.valley .colophon {
+  position: relative;
+  z-index: 2;
+  background: var(--v-scrim-foot);
+  border-top-color: var(--rule);
+}
+body.valley main { position: relative; z-index: 1; }
+
+/* ---------------------------------------------------------------
+   Dusk and dawn — the switch between the two scenes
+
+   The order matters more than the duration. Going to night the sun sinks
+   first and only then, once the sky has taken some of the colour out of
+   itself, does the moon come up and the windows start to light: hence the
+   delay on --v-night, which gates everything that belongs to the dark.
+   Run backwards the same numbers read correctly too — the sun comes up
+   promptly and the moon and stars linger a moment into the light, which is
+   what actually happens at dawn.
+
+   Anchors are deliberately left out of the colour transitions: a:hover
+   changes colour, and a two-second hover would feel broken.
+   --------------------------------------------------------------- */
+body.valley {
+  --v-dur: 2.1s;         /* the crossfade as a whole */
+  --v-sun-dur: 1.2s;     /* the sun's own descent */
+  --v-moon-dur: 1.5s;
+  --v-moon-delay: 0.6s;
+  /* Type and the surfaces behind it are the exception to the slow fade.
+     Eased across the full duration the title spends about a second at low
+     contrast: it is travelling from a colour chosen for one scene to a
+     colour chosen for the other while the ground beneath it is only
+     halfway between the two. So both change quickly, near the middle —
+     and the ground goes first, landing before the ink that sits on it. */
+  --v-scrim-dur: 0.45s;
+  --v-scrim-delay: 0.7s;
+  --v-ink-dur: 0.3s;
+  --v-ink-delay: 0.95s;
+
+  transition:
+    --v-day var(--v-sun-dur) ease-in-out,
+    --v-night var(--v-moon-dur) ease-in-out var(--v-moon-delay),
+    background-color var(--v-dur) linear,
+    color var(--v-ink-dur) linear var(--v-ink-delay);
+}
+
+/* The scene's own colours. Everything here is a fill, a stroke or a gradient
+   stop reading a token, so transitioning the four properties covers the lot
+   without naming sixty selectors. Opacity is not in this list: the gated
+   elements get theirs from --v-night, which is already interpolating, and
+   chasing that with a transition as well only smears it. */
+.scene * {
+  transition:
+    fill var(--v-dur) linear,
+    stroke var(--v-dur) linear,
+    stop-color var(--v-dur) linear,
+    stop-opacity var(--v-dur) linear;
+}
+
+/* The exceptions: opacity here comes from a token rather than the gate. */
+.snow,
+.pg-doorlight,
+.pg-win {
+  transition:
+    fill var(--v-dur) linear,
+    opacity var(--v-dur) linear;
+}
+
+/* The scene itself takes the full crossfade. */
+body.valley .valley-bg {
+  transition: background-color var(--v-dur) linear;
+}
+
+/* Every surface that exists to carry type changes when the type does, not
+   when the scene does. They are all scrims and panels chosen to contrast
+   with the ink in front of them, so if one eased over two seconds while the
+   ink flipped in half of one, the pair would spend the difference in the
+   worst combination of the two — dark prose on a darkening panel, or the
+   hero wash gone from under a title that is still dark. */
+body.valley .masthead,
+body.valley .masthead::before,
+body.valley .colophon,
+body.valley .valley-bg::after,
+body.valley .valley-reader {
+  transition:
+    background-color var(--v-scrim-dur) linear var(--v-scrim-delay),
+    background-image var(--v-scrim-dur) linear var(--v-scrim-delay),
+    border-color var(--v-scrim-dur) linear var(--v-scrim-delay);
+}
+
+body.valley .valley-name,
+body.valley .valley-name-np,
+body.valley .valley-name-en,
+body.valley .valley-eyebrow,
+body.valley .valley-strap,
+body.valley .valley-prose,
+body.valley .section-mark {
+  transition:
+    color var(--v-ink-dur) linear var(--v-ink-delay),
+    border-color var(--v-ink-dur) linear var(--v-ink-delay),
+    text-shadow var(--v-ink-dur) linear var(--v-ink-delay);
+}
+
+/* ---------------------------------------------------------------
+   The scene as page background
+   --------------------------------------------------------------- */
+.valley-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--ground);
+}
+
+.scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The hero title sits at the foot of the first screen. At night that band of
+   the scene is dark and pale type reads on it unaided, so the night value is
+   fully transparent and nothing changes. At dawn the same band is the lit
+   roofs of the houses, which dark type cannot survive — hence a wash, which
+   is also more or less what a valley morning does to that view anyway.
+   It lives on the fixed background so it spans the viewport without a
+   100vw breakout, and it is out of the way the moment the reader scrolls. */
+.valley-bg::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: min(52vh, 440px);
+  background: linear-gradient(to bottom, var(--v-hero-scrim-0), var(--v-hero-scrim));
+}
+
+/* ---------------------------------------------------------------
+   Hero
+   --------------------------------------------------------------- */
+.valley-hero {
+  position: relative;
+  min-height: min(86vh, 760px);
+  display: flex;
+  align-items: flex-end;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--gutter) clamp(40px, 8vh, 90px);
+}
+
+.valley-title { max-width: 46em; }
+
+.valley-eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-hero-accent);
+  margin: 0 0 10px;
+}
+
+.valley-name {
+  margin: 0 0 10px;
+  font-family: var(--display);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  /* The name sits over the sky, which is not uniform in either scene —
+     a dark bloom behind pale type at night, a light one behind dark
+     type at dawn. Same rule, opposite token. */
+  text-shadow: 0 2px 26px var(--v-hero-shadow);
+}
+
+.valley-name-np {
+  display: block;
+  font-size: clamp(30px, 5.2vw, 60px);
+  line-height: 1.25;
+  color: var(--v-hero-ink);
+}
+
+.valley-name-en {
+  display: block;
+  font-weight: 400;
+  font-size: clamp(17px, 2vw, 23px);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--v-hero-accent);
+  margin-top: 8px;
+}
+
+.valley-strap {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: clamp(11px, 1.4vw, 13px);
+  letter-spacing: 0.05em;
+  color: var(--v-hero-ink-soft);
+  text-shadow: 0 1px 14px var(--v-hero-shadow);
+}
+
+/* ---------------------------------------------------------------
+   Reader panel — the prose needs a settled ground to sit on, or the
+   moving scene behind it makes it hard to read. Solid at the top of
+   the text, easing out of the hero above it.
+   --------------------------------------------------------------- */
+.valley-reader {
+  position: relative;
+  background:
+    linear-gradient(to bottom, var(--v-panel-0) 0, var(--v-panel) 90px),
+    var(--v-panel);
+  padding-top: 20px;
+}
+
+@supports (backdrop-filter: blur(6px)) {
+  .valley-reader {
+    background:
+      linear-gradient(to bottom, var(--v-panel-0) 0, var(--v-panel-blur) 90px),
+      var(--v-panel-blur);
+    backdrop-filter: blur(7px);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Scene fills
+   --------------------------------------------------------------- */
+/* Gradient stops. CSS overrides the presentation attributes the SVG carries,
+   which is what lets the sky, the glows and the fog switch with the theme. */
+.g-sky-1 { stop-color: var(--v-sky-1); }
+.g-sky-2 { stop-color: var(--v-sky-2); }
+.g-sky-3 { stop-color: var(--v-sky-3); }
+.g-sky-4 { stop-color: var(--v-sky-4); }
+.g-sky-5 { stop-color: var(--v-sky-5); }
+
+.g-orb-1 { stop-color: var(--v-orbglow-1); stop-opacity: var(--v-orbglow-o1); }
+.g-orb-2 { stop-color: var(--v-orbglow-2); stop-opacity: var(--v-orbglow-o2); }
+.g-orb-3 { stop-color: var(--v-orbglow-3); }
+
+.g-cast-1 { stop-color: var(--v-cast-1); stop-opacity: var(--v-cast-o1); }
+.g-cast-2 { stop-color: var(--v-cast-2); stop-opacity: var(--v-cast-o2); }
+.g-cast-3 { stop-color: var(--v-cast-3); }
+
+.g-gnd-1 { stop-color: var(--v-gnd-1); }
+.g-gnd-2 { stop-color: var(--v-gnd-2); stop-opacity: var(--v-gnd-o2); }
+.g-gnd-3 { stop-color: var(--v-gnd-3); stop-opacity: var(--v-gnd-o3); }
+
+.g-fog-0 { stop-color: var(--v-fog); }
+.g-fog-1 { stop-color: var(--v-fog); stop-opacity: var(--v-fog-o); }
+
+/* The lamp glow is warm in both scenes; it is the opacity that is gated,
+   down in the motion section, so an unlit street has no halo over it. */
+.g-lamp-1 { stop-color: var(--lamp); stop-opacity: 0.5; }
+.g-lamp-2 { stop-color: #e0a054; stop-opacity: 0.16; }
+.g-lamp-3 { stop-color: #c98a45; }
+
+/* Sky things that exist in one scene only. The disc and its glow are shared
+   between the moon and the sun — only one group is ever visible, so one set
+   of tokens dresses whichever it is. */
+/* The base opacity matters as much as the keyframes: each star's twinkle is
+   delayed by up to 7s, and until its delay elapses this is what shows. With
+   no value here they fall back to fully opaque — invisible as a fault on a
+   night sky, but a field of white dots over a dawn one. */
+.stars circle { fill: var(--v-star); opacity: calc(var(--v-night) * 0.9); }
+
+/* Each orb sinks when its half of the day is over. The travel is enough to
+   put the disc under the ridgeline — layers 2 and 3 paint the mountains and
+   hills over the top, so it goes down behind them rather than fading on the
+   spot. No transition is declared on transform: the value is a calc() over
+   the gate, so it is already moving whenever the gate is. */
+.moon {
+  opacity: var(--v-night);
+  transform: translateY(calc((1 - var(--v-night)) * 150px));
+}
+.sun {
+  opacity: var(--v-day);
+  transform: translateY(calc((1 - var(--v-day)) * 140px));
+}
+.orb-disc  { fill: var(--v-orb); }
+.moon-maria { fill: var(--v-orb-mark); opacity: var(--v-orb-mark-o); }
+
+.rim        { fill: var(--v-rim); }
+.snow       { fill: var(--v-snow); opacity: var(--v-snow-o); }
+.hill-far   { fill: var(--v-hill-far); }
+.hill-near  { fill: var(--v-hill-near); }
+.hill-stupa { fill: var(--v-hill-stupa); }
+
+.st-dome    { fill: var(--v-dome); }
+.st-plinth  { fill: var(--v-stone); }
+.st-gilt    { fill: var(--gilt); }
+.st-gilt-f  { fill: var(--gilt); }
+.st-band    { fill: var(--sindoor); }
+.st-lamps circle { fill: var(--lamp); opacity: 0.62; }
+/* Held here as well as in the keyframes: the glows are staggered by up to
+   4.8s, and until an element's delay elapses this base value is what shows. */
+.stupa-glow { opacity: calc(var(--v-night) * 0.5); }
+
+/* The face. Stroke widths stay small because the whole harmika is 48 units
+   across — anything heavier closes the eyes up at real size. It is paint on
+   plaster, so it is the same paint in both scenes. */
+.st-eye   { fill: var(--v-eye-white); stroke: var(--v-eye-line); stroke-width: 1.3; }
+.st-iris  { fill: var(--v-iris); }
+.st-pupil { fill: var(--v-pupil); }
+.st-glint { fill: var(--v-eye-white); opacity: 0.9; }
+/* The eye is read mostly from its upper line, so that gets its own heavier
+   stroke laid over the sclera rather than thickening the whole outline. */
+.st-lash  { fill: none; stroke: var(--v-eye-line); stroke-width: 1.9; stroke-linecap: round; }
+.st-lid   { fill: none; stroke: var(--v-lid); stroke-width: 2; stroke-linecap: round; }
+.st-urna  { fill: var(--sindoor); }
+/* A true Archimedean spiral, 1.5 turns — not a hook, which reads as a J. */
+.st-nose  { fill: none; stroke: var(--v-eye-line); stroke-width: 1.8;
+            stroke-linecap: round; stroke-linejoin: round; }
+.st-dots circle { fill: var(--v-eye-white); opacity: 0.7; }
+
+.flagline { stroke: var(--v-flagline); stroke-width: 1.3; fill: none; }
+.flag     { opacity: 0.9; }
+
+.pg-plinth { fill: var(--v-pg-plinth); }
+.pg-stair  { fill: var(--v-pg-stair); }
+/* 33 steps, as counted on the real stair — thin enough to read as texture
+   at scene size rather than as individual treads. */
+.pg-steps  { stroke: var(--v-pg-step); stroke-width: 1; fill: none; }
+.pg-guardian { fill: var(--v-pg-guardian); }
+/* 529 wind bells hang from the five roofs; these stand in for them. */
+.pg-bell   { fill: var(--gilt-deep); opacity: 0.5; }
+.pg-wall   { fill: var(--clay-deep); }
+.pg-roof   { fill: var(--v-pg-roof); }
+.pg-trim   { stroke: var(--gilt); stroke-width: 1.4; fill: none; opacity: 0.55; }
+.pg-ridge  { stroke: var(--gilt); stroke-width: 1.6; fill: none; opacity: 0.4; }
+.pg-strut  { stroke: var(--v-pg-strut); stroke-width: 2.9; fill: none; stroke-linecap: round; }
+/* The veranda columns stand forward of the wall, out under the overhang. */
+.pg-post   { stroke: var(--v-pg-post); stroke-width: 4; fill: none; stroke-linecap: round; }
+.pg-cornice { fill: var(--v-pg-cornice); }
+/* jhingati courses running parallel to the eave */
+.pg-course { stroke: var(--v-pg-course); stroke-width: 1.1; fill: none; opacity: 0.55; }
+/* Doorway and window: a lamp burning at night, a dark opening by day. The
+   two share one token pair so they can never disagree about which it is. */
+.pg-doorlight { fill: var(--v-opening); opacity: var(--v-opening-o); }
+.pg-win    { fill: var(--v-opening); opacity: calc(var(--v-opening-o) * 0.83); }
+.pg-finial { fill: var(--gilt); }
+
+.h-roof    { fill: var(--v-h-roof); }
+.h-tile    { stroke: var(--v-h-tile); stroke-width: 0.8; fill: none; opacity: 0.75; }
+.h-eave    { stroke: var(--gilt-deep); stroke-width: 0.9; fill: none; opacity: 0.32; }
+.h-body    { fill: var(--clay-deep); }
+.h-course  { stroke: var(--v-h-course); stroke-width: 0.6; fill: none; opacity: 0.5; }
+/* The interior seen through the lattice. At night a lit window is painted
+   over this; by day it is what the window shows. */
+.h-reveal   { fill: var(--v-h-reveal); }
+.h-lattice  { stroke: var(--v-h-lattice); stroke-width: 0.9; fill: none; }
+.h-surround { fill: var(--timber); }
+.h-balcony  { fill: var(--v-h-balcony); }
+.h-bracket  { fill: var(--timber); }
+.h-lintel   { fill: var(--timber); }
+.h-dentil   { stroke: var(--v-h-lattice); stroke-width: 1.4; fill: none; }
+
+/* The frame group carries the stroke so its rects, circles and arch paths
+   all pick it up without three separate rules. */
+.h-frame { fill: none; stroke: var(--timber); stroke-width: 1.6; }
+
+/* Lit windows. The opacity multiplies by the per-instance --lit-* and by
+   --v-night, so an unlit window stays at zero however the flicker animates,
+   and every window goes out at dawn. */
+.h-lamp { fill: var(--lamp); }
+.h-lamp-a { opacity: calc(var(--v-night) * var(--lit-a, 0) * 0.88); }
+.h-lamp-b { opacity: calc(var(--v-night) * var(--lit-b, 0) * 0.88); }
+.h-lamp-d { opacity: calc(var(--v-night) * var(--lit-d, 0) * 0.7); }
+
+/* Street lamps: bronze post, warm lantern. The glow circle lives outside the
+   symbol so it can be larger than the lamp's own box. */
+.lp-cap    { fill: var(--v-lp-metal); }
+.lp-glass  { fill: var(--v-lp-glass); }
+.lp-flame  { fill: var(--lamp); opacity: var(--v-night); }
+.lp-frame  { stroke: var(--v-lp-metal); stroke-width: 1.1; fill: none; }
+.lp-post   { fill: var(--v-lp-metal); }
+.lp-collar { fill: var(--v-lp-collar); }
+.lp-base   { fill: var(--v-lp-base); }
+.lp-glow   { fill: url(#v-lampglow); opacity: calc(var(--v-night) * 0.55); }
+
+.ev-base   { fill: var(--v-ev-base); }
+.ev-body   { fill: var(--v-ev-body); }
+.ev-head   { fill: var(--v-ev-head); }
+.ev-screen { fill: var(--v-ev-screen); }
+/* The bolt sits on the screen, which is dark in both scenes, so it keeps
+   one bright value rather than following the body. */
+.ev-bolt   { fill: var(--v-ev-bolt); }
+.ev-led    { fill: var(--v-ev-led); }
+.ev-cable  { stroke: var(--v-ev-cable); stroke-width: 3; fill: none; stroke-linecap: round; }
+.ev-charge {
+  stroke: var(--v-ev-charge);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 0.18 0.82;
+}
+
+.car-body  { fill: var(--v-car-body); }
+.car-glass { fill: var(--v-car-glass); }
+.car-wheel { fill: var(--v-car-wheel); }
+.car-tail  { fill: var(--v-car-tail); }
+
+.bird {
+  fill: none;
+  stroke: var(--v-bird);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+/* ---------------------------------------------------------------
+   Motion. Every animation here is gated on the reduced-motion block
+   at the foot of this file.
+   --------------------------------------------------------------- */
+@keyframes v-layer-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* The rise animations run on an inner group, so the outer .moon / .sun can
+   carry the plain --v-night / --v-day gate. Group opacity multiplies, and a
+   property an animation never touches cannot be argued with. */
+@keyframes v-moonrise {
+  from { opacity: 0; transform: translateY(84px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* The sun comes up out of the ridge rather than down onto it. */
+@keyframes v-sunrise {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes v-twinkle {
+  0%, 100% { opacity: calc(var(--v-night) * 0.9); }
+  50%      { opacity: calc(var(--v-night) * 0.22); }
+}
+
+@keyframes v-flutter {
+  0%, 100% { transform: rotate(-3deg) skewX(0deg) scaleY(1); }
+  35%      { transform: rotate(4deg) skewX(-7deg) scaleY(0.97); }
+  70%      { transform: rotate(-2deg) skewX(5deg) scaleY(1.02); }
+}
+
+@keyframes v-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-800px); }
+}
+
+/* The lamp keyframes multiply through the instance's own --lit-* value, so
+   a dark window animates between zero and zero and never shimmers — and
+   through --v-night, so the whole street does the same at dawn. */
+@keyframes v-lamp-a {
+  0%, 100% { opacity: calc(var(--v-night) * var(--lit-a, 0) * 0.88); }
+  42%      { opacity: calc(var(--v-night) * var(--lit-a, 0) * 0.66); }
+  71%      { opacity: calc(var(--v-night) * var(--lit-a, 0) * 0.95); }
+}
+@keyframes v-lamp-b {
+  0%, 100% { opacity: calc(var(--v-night) * var(--lit-b, 0) * 0.88); }
+  38%      { opacity: calc(var(--v-night) * var(--lit-b, 0) * 0.70); }
+  66%      { opacity: calc(var(--v-night) * var(--lit-b, 0) * 0.97); }
+}
+
+/* Anything that is a light source in the dark: gated, so the street lamps
+   and the stupa floods leave no halo behind them in daylight. */
+@keyframes v-glow {
+  0%, 100% { opacity: calc(var(--v-night) * 0.5); }
+  50%      { opacity: calc(var(--v-night) * 0.72); }
+}
+
+/* The butter lamps are the exception — they are still burning at dawn, so
+   they get the same breathing motion without the gate. */
+@keyframes v-glow-warm {
+  0%, 100% { opacity: 0.62; }
+  50%      { opacity: 0.85; }
+}
+
+@keyframes v-led {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 1; }
+}
+
+/* A charge travelling down the cable, drawn with a moving dash. */
+@keyframes v-charge {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes v-fly {
+  from { transform: translate(-140px, var(--fy)); opacity: 0; }
+  8%   { opacity: 0.55; }
+  92%  { opacity: 0.55; }
+  to   { transform: translate(1320px, calc(var(--fy) - 62px)); opacity: 0; }
+}
+
+/* Layers fade up back to front. `both` holds the from-state before the
+   delay elapses, so nothing flashes in at full opacity first. */
+.lyr { animation: v-layer-in 0.85s cubic-bezier(0.22, 0.68, 0.32, 1) both; }
+.lyr-1  { animation-delay: 0.05s; }
+.lyr-2  { animation-delay: 0.20s; }
+.lyr-3  { animation-delay: 0.32s; }
+.lyr-4  { animation-delay: 0.44s; }
+.lyr-5  { animation-delay: 0.56s; }
+.lyr-6  { animation-delay: 0.68s; }
+.lyr-7  { animation-delay: 0.80s; }
+.lyr-8  { animation-delay: 0.90s; }
+.lyr-9  { animation-delay: 1.02s; }
+.lyr-10 { animation-delay: 1.15s; }
+
+/* 0.35s + 1.6s lands at 1.95s, inside the 2.0s the layer cascade takes.
+   These were the longest things on the page at 2.8s and 3.2s. */
+.moon-rise { animation: v-moonrise 1.6s cubic-bezier(0.16, 0.72, 0.3, 1) 0.35s both; }
+.sun-rise  { animation: v-sunrise 1.6s cubic-bezier(0.16, 0.72, 0.3, 1) 0.35s both; }
+
+.stars circle {
+  animation: v-twinkle var(--t, 4s) ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+/* transform-box is what makes transform-origin resolve against the element's
+   own box rather than the SVG viewport — without it every flag pivots about
+   the far corner of the scene. */
+.flag {
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: v-flutter 2.9s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+/* Each band is drawn twice, 800 units apart, and the drift is exactly 800 —
+   so the second copy lands where the first began and the loop has no seam. */
+.fog { animation: v-drift linear infinite; }
+.fog-a { animation-duration: 74s; }
+.fog-b { animation-duration: 103s; }
+
+.h-lamp-a { animation: v-lamp-a 7.5s ease-in-out infinite; animation-delay: var(--fa, 0s); }
+.h-lamp-b { animation: v-lamp-b 8.9s ease-in-out infinite; animation-delay: var(--fb, 0s); }
+
+.lp-glow,
+.stupa-glow {
+  animation: v-glow 9s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+/* Inside the lamp symbol, so it must be reached by its own class — the --d on
+   the wrapping group still inherits through the <use>. */
+.lp-flame {
+  animation: v-glow 5.5s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+.st-lamps circle {
+  animation: v-glow-warm 5.5s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+/* Targeted by their own class, not as descendants: a selector cannot reach
+   across the shadow boundary <use> creates, so `.ev .ev-led` would match
+   nothing. Custom properties do inherit through it, which is how each post
+   still gets its own --d stagger. */
+.ev-led {
+  animation: v-led 2.6s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+/* pathLength="1" normalises the cable, so the dash pair and the offset can
+   be written without measuring the real curve. */
+.ev-charge {
+  animation: v-charge 2.2s linear infinite;
+  animation-delay: var(--d, 0s);
+}
+
+.flock { animation: v-fly linear infinite; }
+.flock-a { --fy: 150px; animation-duration: 58s; animation-delay: 2s; }
+.flock-b { --fy: 232px; animation-duration: 81s; animation-delay: 16s; }
+
+/* ---------------------------------------------------------------
+   Prose — narrow mono rail left, measure-capped prose right.
+   .section already provides the 128px grid; this only sets the
+   measure and the colours.
+   --------------------------------------------------------------- */
+.valley-section { padding-top: 58px; padding-bottom: 58px; }
+.valley-section-end { padding-bottom: 96px; }
+
+.valley-section .section-mark {
+  border-top-color: var(--v-mark);
+  color: var(--v-mark);
+}
+
+.valley-prose {
+  max-width: 64ch;
+  font-size: 18px;
+  line-height: 1.72;
+  color: var(--ink-soft);
+}
+
+.valley-prose p { margin: 0 0 1.3em; }
+.valley-prose p:last-child { margin-bottom: 0; }
+.valley-prose a { color: var(--signal); }
+
+.valley-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.valley-links a { text-decoration: none; }
+.valley-links a:hover,
+.valley-links a:focus-visible { text-decoration: underline; }
+
+body.valley :focus-visible {
+  outline: 2px solid var(--v-focus);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------
+   Responsive
+   --------------------------------------------------------------- */
+@media (max-width: 920px) {
+  .valley-section { padding-top: 44px; padding-bottom: 44px; }
+  .valley-hero { min-height: min(76vh, 620px); }
+}
+
+@media (max-width: 600px) {
+  .valley-hero { min-height: 64vh; }
+  .valley-prose { font-size: 17px; }
+}
+
+/* iOS gives a fixed element the full screen height, so the scene shifts as
+   the address bar collapses. Painting it as a scrolling background instead
+   costs the parallax but holds still. */
+@supports (-webkit-touch-callout: none) {
+  .valley-bg { position: absolute; height: 100vh; }
+}
+
+/* ---------------------------------------------------------------
+   Reduced motion — the scene is still fully drawn and fully lit, it
+   simply holds its end state and nothing loops.
+   --------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  /* The crossfade collapses to nothing from one place: every duration and
+     delay in it is read from these four tokens. The scene still arrives at
+     the right state, it just gets there in a single frame. */
+  body.valley {
+    --v-dur: 0s;
+    --v-sun-dur: 0s;
+    --v-moon-dur: 0s;
+    --v-moon-delay: 0s;
+    --v-scrim-dur: 0s;
+    --v-scrim-delay: 0s;
+    --v-ink-dur: 0s;
+    --v-ink-delay: 0s;
+  }
+
+  .lyr,
+  .moon-rise,
+  .sun-rise,
+  .stars circle,
+  .flag,
+  .fog,
+  .flock,
+  .h-lamp-a,
+  .h-lamp-b,
+  .lp-glow,
+  .lp-flame,
+  .stupa-glow,
+  .st-lamps circle,
+  .ev-led,
+  .ev-charge {
+    animation: none !important;
+  }
+  /* Every opacity the keyframes were carrying has to be restated here, and
+     the ones that belong to only one scene keep their gate. */
+  .lyr, .moon-rise, .sun-rise { opacity: 1; transform: none; }
+  .stars circle { opacity: calc(var(--v-night) * 0.9); }
+  .h-lamp-a { opacity: calc(var(--v-night) * var(--lit-a, 0) * 0.88); }
+  .h-lamp-b { opacity: calc(var(--v-night) * var(--lit-b, 0) * 0.88); }
+  .lp-glow { opacity: calc(var(--v-night) * 0.55); }
+  .lp-flame { opacity: var(--v-night); }
+  .stupa-glow { opacity: calc(var(--v-night) * 0.5); }
+  .st-lamps circle { opacity: 0.72; }
+  .ev-led { opacity: 1; }
+  .ev-charge { stroke-dashoffset: 0; }
+  /* Parked mid-frame rather than hidden: the flocks are part of the picture. */
+  .flock-a { transform: translate(330px, 150px); }
+  .flock-b { transform: translate(880px, 232px); }
+}

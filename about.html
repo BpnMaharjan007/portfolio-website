@@ -1,0 +1,815 @@
+---
+layout: default
+title: About
+permalink: /about/
+valley: true
+description: >-
+  Bipin Maharjan — electrical engineer from the Kathmandu Valley, working on
+  grid-forming inverter control, current limiting and microgrid resilience.
+---
+
+{% comment %}
+  The scene is the page background: fixed behind everything, so it stays in
+  view and keeps animating while the prose scrolls over it. Layer order is
+  back to front, matching the group ids.
+{% endcomment %}
+<div class="valley-bg" aria-hidden="true">
+  <svg class="scene" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMax slice"
+       role="img" aria-label="Hand-drawn scene of the Kathmandu Valley: the Himalayan rim, Swayambhunath stupa on its hill with prayer flags, a five-tiered pagoda, fog on the valley floor, a row of Newar brick townhouses, and electric vehicle charging posts along the street. Lit for night or for dawn, following the page theme.">
+    {% comment %}
+      The stop colours are carried by classes rather than written here, so the
+      whole scene relights from valley.css when the theme changes — CSS
+      stop-color overrides the presentation attribute. The attributes are kept
+      alongside as the night values, so a stylesheet that fails to load still
+      leaves a picture rather than a black rectangle.
+    {% endcomment %}
+    <defs>
+      <linearGradient id="v-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop class="g-sky-1" offset="0"    stop-color="#080a1c"/>
+        <stop class="g-sky-2" offset="0.34" stop-color="#101433"/>
+        <stop class="g-sky-3" offset="0.62" stop-color="#1d1d47"/>
+        <stop class="g-sky-4" offset="0.84" stop-color="#33244d"/>
+        <stop class="g-sky-5" offset="1"    stop-color="#5a3450"/>
+      </linearGradient>
+
+      <!-- shared by the moon and the sun: only one of them is ever visible -->
+      <radialGradient id="v-orbglow" cx="0.5" cy="0.5" r="0.5">
+        <stop class="g-orb-1" offset="0"    stop-color="#dfe6ff" stop-opacity="0.5"/>
+        <stop class="g-orb-2" offset="0.4"  stop-color="#b9c4f0" stop-opacity="0.16"/>
+        <stop class="g-orb-3" offset="1"    stop-color="#8e9ad6" stop-opacity="0"/>
+      </radialGradient>
+
+      <radialGradient id="v-lampglow" cx="0.5" cy="0.5" r="0.5">
+        <stop class="g-lamp-1" offset="0"   stop-color="#f6c579" stop-opacity="0.5"/>
+        <stop class="g-lamp-2" offset="0.5" stop-color="#e0a054" stop-opacity="0.16"/>
+        <stop class="g-lamp-3" offset="1"   stop-color="#c98a45" stop-opacity="0"/>
+      </radialGradient>
+
+      <radialGradient id="v-citycast" cx="0.5" cy="1" r="0.72">
+        <stop class="g-cast-1" offset="0"    stop-color="#c9803f" stop-opacity="0.30"/>
+        <stop class="g-cast-2" offset="0.55" stop-color="#8a4f39" stop-opacity="0.10"/>
+        <stop class="g-cast-3" offset="1"    stop-color="#5a3450" stop-opacity="0"/>
+      </radialGradient>
+
+      <linearGradient id="v-ground" x1="0" y1="0" x2="0" y2="1">
+        <stop class="g-gnd-1" offset="0"   stop-color="#0d0a20" stop-opacity="0"/>
+        <stop class="g-gnd-2" offset="0.5" stop-color="#0a0819" stop-opacity="0.78"/>
+        <stop class="g-gnd-3" offset="1"   stop-color="#070614" stop-opacity="1"/>
+      </linearGradient>
+
+      <linearGradient id="v-fog" x1="0" y1="0" x2="0" y2="1">
+        <stop class="g-fog-0" offset="0"   stop-color="#9fb0d8" stop-opacity="0"/>
+        <stop class="g-fog-1" offset="0.5" stop-color="#9fb0d8" stop-opacity="0.30"/>
+        <stop class="g-fog-0" offset="1"   stop-color="#9fb0d8" stop-opacity="0"/>
+      </linearGradient>
+
+      {% comment %}
+        Custom properties inherit into a <use> shadow tree, so one house symbol
+        can light its own windows per instance: --lit-a / --lit-b / --lit-d are
+        set on each <use>, and the flicker delays with them.
+      {% endcomment %}
+      <symbol id="nw-house" viewBox="0 0 100 120" preserveAspectRatio="none">
+        <path class="h-roof" d="M0,26 L15,5 L85,5 L100,26 Z"/>
+        <g class="h-tile">
+          <path d="M4,22 L17,9 M12,22 L25,9 M20,22 L33,9 M28,22 L41,9 M36,22 L49,9
+                   M44,22 L57,9 M52,22 L65,9 M60,22 L73,9 M68,22 L81,9 M76,22 L89,9"/>
+        </g>
+        <path class="h-eave" d="M0,26 L100,26"/>
+
+        <!-- carved dentil cornice under the eave -->
+        <g class="h-dentil">
+          <path d="M6,27 L6,31 M14,27 L14,31 M22,27 L22,31 M30,27 L30,31 M38,27 L38,31
+                   M46,27 L46,31 M54,27 L54,31 M62,27 L62,31 M70,27 L70,31 M78,27 L78,31
+                   M86,27 L86,31 M94,27 L94,31"/>
+        </g>
+
+        <rect class="h-body" x="6" y="31" width="88" height="89"/>
+        <!-- gājhyā: the window that sits directly under the roof structure -->
+        <rect class="h-reveal" x="20" y="31.5" width="60" height="5"/>
+        <rect class="h-lamp h-lamp-a" x="20" y="31.5" width="60" height="5"/>
+        <g class="h-lattice">
+          <path d="M27,31.5 L27,36.5 M34,31.5 L34,36.5 M41,31.5 L41,36.5 M48,31.5 L48,36.5
+                   M55,31.5 L55,36.5 M62,31.5 L62,36.5 M69,31.5 L69,36.5 M76,31.5 L76,36.5"/>
+        </g>
+        <g class="h-frame"><rect x="20" y="31.5" width="60" height="5"/></g>
+        <g class="h-course">
+          <path d="M6,40 L94,40 M6,50 L94,50 M6,60 L94,60 M6,70 L94,70
+                   M6,80 L94,80 M6,90 L94,90 M6,100 L94,100 M6,110 L94,110"/>
+        </g>
+
+        <!-- sañjhyā: the classic projecting bay, three units centred on the facade -->
+        <rect class="h-surround" x="10" y="36" width="80" height="25"/>
+        <path class="h-reveal" d="M14,60 L14,47 Q22,38.5 30,47 L30,60 Z
+                                  M40,60 L40,45 Q50,36 60,45 L60,60 Z
+                                  M70,60 L70,47 Q78,38.5 86,47 L86,60 Z"/>
+        <path class="h-lamp h-lamp-a" d="M14,60 L14,47 Q22,38.5 30,47 L30,60 Z
+                                  M40,60 L40,45 Q50,36 60,45 L60,60 Z
+                                  M70,60 L70,47 Q78,38.5 86,47 L86,60 Z"/>
+        <g class="h-lattice">
+          <path d="M18,60 L18,44.5 M22,60 L22,42.5 M26,60 L26,44.5 M14,53 L30,53
+                   M45,60 L45,42 M50,60 L50,39.5 M55,60 L55,42 M40,52 L60,52
+                   M74,60 L74,44.5 M78,60 L78,42.5 M82,60 L82,44.5 M70,53 L86,53"/>
+        </g>
+        <g class="h-frame">
+          <path d="M14,60 L14,47 Q22,38.5 30,47 L30,60
+                   M40,60 L40,45 Q50,36 60,45 L60,60
+                   M70,60 L70,47 Q78,38.5 86,47 L86,60"/>
+        </g>
+
+        <!-- projecting balcony with carved brackets beneath -->
+        <path class="h-balcony" d="M7,61 L93,61 L93,67 L7,67 Z"/>
+        <g class="h-bracket">
+          <path d="M13,67 L20,67 L14.5,74 Z M31,67 L38,67 L32.5,74 Z
+                   M47,67 L54,67 L48.5,74 Z M63,67 L70,67 L64.5,74 Z
+                   M80,67 L87,67 L81.5,74 Z"/>
+        </g>
+
+        <!-- tikijhyā: the everyday lattice window — light and air in, no view in -->
+        <path class="h-lintel" d="M35,75 L65,75 L63,79 L37,79 Z"/>
+        <rect class="h-reveal" x="40" y="79" width="20" height="17"/>
+        <circle class="h-reveal" cx="20" cy="88" r="8"/>
+        <circle class="h-reveal" cx="80" cy="88" r="8"/>
+        <rect class="h-lamp h-lamp-b" x="40" y="79" width="20" height="17"/>
+        <circle class="h-lamp h-lamp-b" cx="20" cy="88" r="8"/>
+        <circle class="h-lamp h-lamp-b" cx="80" cy="88" r="8"/>
+        <g class="h-lattice">
+          <path d="M45,79 L45,96 M50,79 L50,96 M55,79 L55,96 M40,85 L60,85 M40,91 L60,91
+                   M14,88 L26,88 M20,82 L20,94 M15.8,83.8 L24.2,92.2 M24.2,83.8 L15.8,92.2
+                   M74,88 L86,88 M80,82 L80,94 M75.8,83.8 L84.2,92.2 M84.2,83.8 L75.8,92.2"/>
+        </g>
+        <g class="h-frame">
+          <rect x="40" y="79" width="20" height="17"/>
+          <circle cx="20" cy="88" r="8"/>
+          <circle cx="80" cy="88" r="8"/>
+        </g>
+
+        <!-- ground floor: the workspace/shop opening -->
+        <path class="h-lintel" d="M35,101 L65,101 L63,105 L37,105 Z"/>
+        <rect class="h-reveal" x="39" y="105" width="22" height="15"/>
+        <rect class="h-lamp h-lamp-d" x="39" y="105" width="22" height="15"/>
+        <g class="h-frame"><rect x="39" y="105" width="22" height="15"/></g>
+      </symbol>
+
+      <!-- EV charging post: screen, status LED, and a cable with a travelling
+           charge pulse. The thesis subject, standing in the street. -->
+      <symbol id="ev-post" viewBox="0 0 40 70">
+        <rect class="ev-base" x="7" y="63" width="26" height="7" rx="2"/>
+        <rect class="ev-body" x="14" y="16" width="12" height="48" rx="2"/>
+        <rect class="ev-head" x="9" y="5" width="22" height="19" rx="3"/>
+        <rect class="ev-screen" x="12.5" y="8.5" width="15" height="10" rx="1.5"/>
+        <path class="ev-bolt" d="M21.2,10.4 L17.6,14.6 L19.9,14.6 L18.8,17.4 L22.4,13.2 L20.1,13.2 Z"/>
+        <rect class="ev-led" x="17.5" y="29" width="5" height="20" rx="2.5"/>
+        <path class="ev-cable" d="M26,26 C34,32 36,44 31,56"/>
+        <path class="ev-charge" d="M26,26 C34,32 36,44 31,56" pathLength="1"/>
+      </symbol>
+      <!-- classic street lamp: bronze post, tapered lantern, warm flame -->
+      <symbol id="st-lamp" viewBox="0 0 24 64">
+        <path class="lp-cap" d="M4,4.5 L20,4.5 L17,0 L7,0 Z"/>
+        <path class="lp-glass" d="M7,5 L17,5 L15,17 L9,17 Z"/>
+        <path class="lp-flame" d="M8.6,6.5 L15.4,6.5 L13.8,15.5 L10.2,15.5 Z"/>
+        <path class="lp-frame" d="M7,5 L9,17 M17,5 L15,17 M8,11 L16,11"/>
+        <rect class="lp-post" x="10.6" y="17" width="2.8" height="41"/>
+        <path class="lp-collar" d="M8.5,17 L15.5,17 L14.5,20 L9.5,20 Z"/>
+        <path class="lp-base" d="M7.5,64 L16.5,64 L15,56 L9,56 Z"/>
+      </symbol>
+    </defs>
+
+    <!-- 1 · sky, stars and the orb of the hour -->
+    <g class="lyr lyr-1">
+      <rect x="0" y="0" width="1200" height="620" fill="url(#v-sky)"/>
+      <g class="stars">
+        <circle cx="391.3" cy="22.7" r="0.68" style="--d:1.10s;--t:6.45s"/>
+        <circle cx="384.2" cy="264.7" r="1.13" style="--d:1.21s;--t:4.24s"/>
+        <circle cx="629.8" cy="334.7" r="1.59" style="--d:0.96s;--t:3.97s"/>
+        <circle cx="1053.1" cy="187.6" r="1.42" style="--d:1.29s;--t:3.04s"/>
+        <circle cx="29.1" cy="40.1" r="0.52" style="--d:0.37s;--t:5.12s"/>
+        <circle cx="669" cy="19.3" r="0.8" style="--d:0.85s;--t:6.66s"/>
+        <circle cx="709.6" cy="318" r="0.95" style="--d:0.53s;--t:6.18s"/>
+        <circle cx="236.2" cy="47.7" r="0.73" style="--d:1.13s;--t:4.33s"/>
+        <circle cx="166" cy="35.8" r="1.12" style="--d:0.29s;--t:3.95s"/>
+        <circle cx="1128.8" cy="173.6" r="1.19" style="--d:0.72s;--t:3.08s"/>
+        <circle cx="880.1" cy="109.6" r="0.92" style="--d:1.00s;--t:4.57s"/>
+        <circle cx="693.2" cy="39.7" r="1.6" style="--d:1.41s;--t:6.09s"/>
+        <circle cx="788.6" cy="261.8" r="0.63" style="--d:1.41s;--t:4.97s"/>
+        <circle cx="280.8" cy="27" r="1.08" style="--d:1.70s;--t:5.77s"/>
+        <circle cx="1129.1" cy="307.3" r="1.34" style="--d:0.26s;--t:6.56s"/>
+        <circle cx="660" cy="59.6" r="0.73" style="--d:0.41s;--t:4s"/>
+        <circle cx="728.8" cy="244.6" r="0.81" style="--d:0.55s;--t:6.39s"/>
+        <circle cx="919.9" cy="38.9" r="1.3" style="--d:0.47s;--t:4.5s"/>
+        <circle cx="78.6" cy="157.8" r="0.56" style="--d:1.76s;--t:4.14s"/>
+        <circle cx="626.2" cy="214.8" r="1.32" style="--d:0.37s;--t:3.94s"/>
+        <circle cx="1142.1" cy="182.8" r="1.59" style="--d:0.04s;--t:6.16s"/>
+        <circle cx="33.7" cy="289.8" r="1.34" style="--d:0.50s;--t:6.98s"/>
+        <circle cx="959.4" cy="306.4" r="0.81" style="--d:0.15s;--t:6.51s"/>
+        <circle cx="906.3" cy="22.6" r="1.27" style="--d:1.63s;--t:4.67s"/>
+        <circle cx="798" cy="213.6" r="1.53" style="--d:0.57s;--t:5.9s"/>
+        <circle cx="249.3" cy="58.4" r="1.14" style="--d:0.74s;--t:3.67s"/>
+        <circle cx="330.6" cy="69.2" r="0.96" style="--d:0.39s;--t:5.94s"/>
+        <circle cx="923" cy="16.2" r="0.9" style="--d:0.13s;--t:4.83s"/>
+        <circle cx="12.3" cy="6.8" r="0.62" style="--d:0.10s;--t:6.22s"/>
+        <circle cx="82.7" cy="200.5" r="1.1" style="--d:1.28s;--t:6.08s"/>
+        <circle cx="85.3" cy="30.6" r="0.54" style="--d:0.85s;--t:3.62s"/>
+        <circle cx="984.7" cy="224.3" r="0.48" style="--d:1.30s;--t:5.27s"/>
+        <circle cx="717.7" cy="38" r="1.08" style="--d:1.47s;--t:4.36s"/>
+        <circle cx="893.3" cy="172.8" r="1.47" style="--d:1.40s;--t:3.99s"/>
+        <circle cx="75.9" cy="235.3" r="1.46" style="--d:0.63s;--t:6.09s"/>
+        <circle cx="1196.7" cy="188.9" r="1.11" style="--d:0.14s;--t:5.17s"/>
+        <circle cx="935.1" cy="35.2" r="0.82" style="--d:1.31s;--t:4.25s"/>
+        <circle cx="1053.9" cy="31.3" r="0.6" style="--d:1.22s;--t:6.54s"/>
+        <circle cx="480.1" cy="331.9" r="0.53" style="--d:0.42s;--t:3.72s"/>
+        <circle cx="125.7" cy="142.5" r="0.48" style="--d:0.37s;--t:4.99s"/>
+        <circle cx="796.1" cy="36.5" r="0.54" style="--d:0.69s;--t:3.62s"/>
+        <circle cx="196.7" cy="276.6" r="0.63" style="--d:0.84s;--t:6.14s"/>
+        <circle cx="1131.7" cy="216.9" r="1.43" style="--d:1.78s;--t:3.86s"/>
+        <circle cx="700.3" cy="60" r="1.43" style="--d:1.42s;--t:4.74s"/>
+        <circle cx="1103.6" cy="158" r="0.85" style="--d:0.73s;--t:5.42s"/>
+        <circle cx="1061.4" cy="51.2" r="1.5" style="--d:1.67s;--t:5.04s"/>
+        <circle cx="838.1" cy="148.2" r="0.46" style="--d:1.49s;--t:4.68s"/>
+        <circle cx="327.4" cy="54.9" r="0.78" style="--d:1.30s;--t:6.63s"/>
+        <circle cx="1116.5" cy="227.7" r="1" style="--d:1.03s;--t:4.33s"/>
+        <circle cx="775.5" cy="132.6" r="0.92" style="--d:0.87s;--t:3.04s"/>
+        <circle cx="223" cy="247.6" r="1.54" style="--d:0.32s;--t:4.19s"/>
+        <circle cx="737.5" cy="36.1" r="0.84" style="--d:0.96s;--t:4.48s"/>
+        <circle cx="30.7" cy="52.4" r="0.53" style="--d:1.32s;--t:3.99s"/>
+        <circle cx="311.2" cy="270.7" r="1.08" style="--d:0.13s;--t:5.93s"/>
+        <circle cx="950.6" cy="267.7" r="1.32" style="--d:0.89s;--t:5.35s"/>
+        <circle cx="210.3" cy="109.1" r="1.39" style="--d:1.03s;--t:6.11s"/>
+        <circle cx="817" cy="163" r="1.36" style="--d:0.54s;--t:4.65s"/>
+        <circle cx="249.2" cy="117.1" r="0.71" style="--d:0.18s;--t:4.55s"/>
+        <circle cx="995.9" cy="241.3" r="0.74" style="--d:1.21s;--t:4.7s"/>
+        <circle cx="182.7" cy="62.2" r="0.53" style="--d:1.57s;--t:6.33s"/>
+        <circle cx="769.8" cy="121.2" r="0.99" style="--d:1.14s;--t:5.38s"/>
+        <circle cx="1088.7" cy="104.7" r="0.63" style="--d:1.40s;--t:5.66s"/>
+        <circle cx="204.7" cy="52.1" r="1.34" style="--d:0.95s;--t:4.47s"/>
+        <circle cx="270.3" cy="161.2" r="1.58" style="--d:0.86s;--t:6.81s"/>
+        <circle cx="843.2" cy="184.6" r="1.07" style="--d:1.58s;--t:6.56s"/>
+        <circle cx="975.5" cy="205.6" r="1.11" style="--d:0.65s;--t:3.22s"/>
+        <circle cx="79.5" cy="280.9" r="1.28" style="--d:0.96s;--t:6.18s"/>
+        <circle cx="1002.4" cy="45.1" r="1.51" style="--d:1.13s;--t:5.89s"/>
+        <circle cx="951.5" cy="187.4" r="1.37" style="--d:0.21s;--t:4.81s"/>
+        <circle cx="1166.6" cy="56" r="0.97" style="--d:0.80s;--t:3.95s"/>
+        <circle cx="85.3" cy="249.7" r="0.94" style="--d:0.16s;--t:3.2s"/>
+        <circle cx="791.1" cy="267.2" r="1.08" style="--d:1.15s;--t:6.94s"/>
+        <circle cx="196.5" cy="112.2" r="1.04" style="--d:0.68s;--t:5.84s"/>
+        <circle cx="948.1" cy="28.6" r="0.52" style="--d:1.60s;--t:4.85s"/>
+        <circle cx="499.4" cy="342.7" r="1.35" style="--d:1.03s;--t:5.52s"/>
+        <circle cx="174.9" cy="180.8" r="1.6" style="--d:1.78s;--t:3.48s"/>
+        <circle cx="346.6" cy="262" r="1.23" style="--d:0.31s;--t:3.66s"/>
+        <circle cx="741.2" cy="126.9" r="1.47" style="--d:0.52s;--t:3.18s"/>
+        <circle cx="148.5" cy="162.4" r="0.71" style="--d:0.20s;--t:6.12s"/>
+        <circle cx="842.3" cy="67.5" r="0.86" style="--d:1.39s;--t:6.09s"/>
+        <circle cx="195.5" cy="154" r="0.5" style="--d:1.55s;--t:4.09s"/>
+        <circle cx="643.3" cy="27.5" r="0.59" style="--d:0.05s;--t:5.54s"/>
+        <circle cx="830.1" cy="63.2" r="0.85" style="--d:0.87s;--t:4.42s"/>
+        <circle cx="747.8" cy="52.4" r="0.76" style="--d:1.47s;--t:4.92s"/>
+        <circle cx="643.2" cy="22.2" r="0.69" style="--d:0.11s;--t:3.69s"/>
+        <circle cx="739" cy="131.4" r="1.46" style="--d:1.08s;--t:5.98s"/>
+        <circle cx="50.5" cy="75.9" r="0.76" style="--d:0.18s;--t:6.35s"/>
+        <circle cx="851.4" cy="290.8" r="1.36" style="--d:1.76s;--t:5.76s"/>
+        <circle cx="773.5" cy="215.7" r="1.21" style="--d:0.67s;--t:3.99s"/>
+        <circle cx="802" cy="285.3" r="1.63" style="--d:0.91s;--t:4.95s"/>
+        <circle cx="1126.3" cy="229.5" r="1.44" style="--d:0.63s;--t:4.56s"/>
+        <circle cx="586" cy="318.6" r="1.42" style="--d:1.63s;--t:6.99s"/>
+        <circle cx="817" cy="106.1" r="1.39" style="--d:0.93s;--t:6.48s"/>
+        <circle cx="849" cy="10.1" r="1.29" style="--d:0.29s;--t:3.18s"/>
+        <circle cx="948.6" cy="163.9" r="0.46" style="--d:1.08s;--t:3.64s"/>
+        <circle cx="1185.4" cy="102.4" r="0.56" style="--d:1.19s;--t:3.17s"/>
+        <circle cx="323.6" cy="159.2" r="1.37" style="--d:0.86s;--t:4.88s"/>
+        <circle cx="241.5" cy="172.8" r="1.45" style="--d:0.34s;--t:5.06s"/>
+        <circle cx="874.9" cy="310.1" r="0.56" style="--d:1.07s;--t:6.19s"/>
+        <circle cx="1018.3" cy="124.4" r="1.55" style="--d:0.93s;--t:6.24s"/>
+        <circle cx="748.9" cy="81.5" r="1.16" style="--d:0.52s;--t:6.41s"/>
+        <circle cx="991.2" cy="8" r="1.52" style="--d:0.30s;--t:6.52s"/>
+        <circle cx="859.4" cy="147.9" r="1.64" style="--d:1.04s;--t:4.77s"/>
+        <circle cx="156.8" cy="61.8" r="1.43" style="--d:0.81s;--t:6.51s"/>
+        <circle cx="718.8" cy="155.3" r="1.45" style="--d:1.44s;--t:3.4s"/>
+        <circle cx="1143.3" cy="44.2" r="1.54" style="--d:0.15s;--t:3.4s"/>
+        <circle cx="114.8" cy="141.5" r="0.7" style="--d:0.74s;--t:4.91s"/>
+        <circle cx="906.1" cy="208.5" r="1.13" style="--d:0.13s;--t:3.28s"/>
+        <circle cx="409.7" cy="277" r="1.49" style="--d:1.49s;--t:3.25s"/>
+        <circle cx="890.4" cy="171.1" r="0.68" style="--d:1.59s;--t:3.39s"/>
+        <circle cx="743.6" cy="125.4" r="0.73" style="--d:1.71s;--t:4.52s"/>
+        <circle cx="828" cy="260.9" r="0.86" style="--d:0.03s;--t:6.39s"/>
+        <circle cx="175.5" cy="243.6" r="1.36" style="--d:0.76s;--t:6.94s"/>
+        <circle cx="255.5" cy="29.6" r="0.91" style="--d:0.52s;--t:5.14s"/>
+        <circle cx="648.1" cy="181.9" r="1.6" style="--d:1.22s;--t:5.05s"/>
+        <circle cx="961.2" cy="57.2" r="1.56" style="--d:0.20s;--t:6.9s"/>
+        <circle cx="209.2" cy="112.4" r="0.88" style="--d:1.47s;--t:3.92s"/>
+        <circle cx="285.6" cy="8.1" r="1.15" style="--d:0.57s;--t:3.26s"/>
+        <circle cx="220.2" cy="98.7" r="1.64" style="--d:1.55s;--t:5.95s"/>
+        <circle cx="955" cy="57.5" r="1.05" style="--d:1.39s;--t:5.92s"/>
+        <circle cx="49.7" cy="236.8" r="1.18" style="--d:0.14s;--t:5.05s"/>
+        <circle cx="149.4" cy="282.4" r="0.71" style="--d:1.57s;--t:6.98s"/>
+        <circle cx="640.3" cy="134.2" r="0.56" style="--d:1.20s;--t:5.68s"/>
+        <circle cx="678.7" cy="8.6" r="1.33" style="--d:0.85s;--t:5.18s"/>
+        <circle cx="789.8" cy="258" r="1.23" style="--d:1.04s;--t:5.05s"/>
+        <circle cx="1079.4" cy="241.1" r="0.62" style="--d:0.36s;--t:4.51s"/>
+        <circle cx="1069" cy="168.1" r="1.55" style="--d:1.31s;--t:5.29s"/>
+        <circle cx="688.2" cy="299.9" r="1.38" style="--d:0.46s;--t:6.98s"/>
+        <circle cx="1187.2" cy="298.7" r="0.55" style="--d:0.98s;--t:5.29s"/>
+        <circle cx="759.8" cy="102.6" r="1.58" style="--d:1.80s;--t:6.5s"/>
+        <circle cx="1181.1" cy="199.5" r="1.15" style="--d:1.31s;--t:3.14s"/>
+        <circle cx="682.4" cy="96.1" r="0.8" style="--d:0.80s;--t:5.73s"/>
+        <circle cx="327.3" cy="32.5" r="0.7" style="--d:0.05s;--t:3.18s"/>
+        <circle cx="371.5" cy="26" r="0.97" style="--d:0.17s;--t:5.39s"/>
+        <circle cx="354.6" cy="328.6" r="1.2" style="--d:1.27s;--t:4.75s"/>
+        <circle cx="574.8" cy="320.8" r="1.35" style="--d:0.89s;--t:3.1s"/>
+        <circle cx="701.5" cy="326.4" r="0.65" style="--d:1.09s;--t:6.9s"/>
+        <circle cx="169.4" cy="50" r="1.38" style="--d:1.70s;--t:3.06s"/>
+        <circle cx="1128.1" cy="7.1" r="1.59" style="--d:1.30s;--t:6.78s"/>
+        <circle cx="689.8" cy="156.3" r="1.51" style="--d:0.21s;--t:3.03s"/>
+        <circle cx="783.9" cy="203.9" r="1.39" style="--d:1.55s;--t:5.42s"/>
+        <circle cx="2.4" cy="160" r="1.64" style="--d:0.28s;--t:5.25s"/>
+        <circle cx="1033.7" cy="49.3" r="1.57" style="--d:0.11s;--t:4.59s"/>
+        <circle cx="17.3" cy="59.1" r="1.56" style="--d:0.24s;--t:4.21s"/>
+        <circle cx="160.4" cy="169.9" r="0.5" style="--d:1.50s;--t:4.65s"/>
+        <circle cx="824.4" cy="135.9" r="1.07" style="--d:1.54s;--t:6.68s"/>
+        <circle cx="693.8" cy="69.5" r="0.64" style="--d:0.80s;--t:3.56s"/>
+        <circle cx="685.9" cy="22.1" r="1.62" style="--d:0.71s;--t:6.58s"/>
+      </g>
+      {% comment %}
+        Moon and sun are the same two shapes dressed by the same tokens, and
+        each is gated on --v-night / --v-day. The rise animation runs on an
+        inner group so the gate sits on a property no animation touches;
+        group opacity multiplies, so a hidden orb stays hidden while its own
+        fade-in plays out underneath.
+      {% endcomment %}
+      <g class="moon">
+        <g class="moon-rise">
+          <circle cx="486" cy="138" r="152" fill="url(#v-orbglow)"/>
+          <circle class="orb-disc" cx="486" cy="138" r="33"/>
+          <g class="moon-maria">
+            <circle cx="477" cy="130" r="7.4"/>
+            <circle cx="495" cy="146" r="5.2"/>
+            <circle cx="489" cy="124" r="3.6"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- The dawn sun sits in the saddle of the rim at x=1045, east of the
+           city — the stupa is west, on the left. Layer 2 paints the mountains
+           over this group, so only the cap above the ridgeline shows. -->
+      <g class="sun">
+        <g class="sun-rise">
+          <circle cx="1045" cy="294" r="230" fill="url(#v-orbglow)"/>
+          <circle class="orb-disc" cx="1045" cy="294" r="44"/>
+        </g>
+      </g>
+      <!-- the valley's own light, thrown back up into the haze -->
+      <ellipse cx="600" cy="470" rx="720" ry="150" fill="url(#v-citycast)"/>
+    </g>
+
+    <!-- 2 · Himalayan rim: moonlit at night, alpenglow at dawn -->
+    <g class="lyr lyr-2">
+      {% comment %}
+        Ridge and caps are generated from one shared list of vertices: each cap
+        starts at a peak vertex and walks a fixed fraction down the two slopes
+        either side of it, so the snow can never float free of the mountain.
+      {% endcomment %}
+      <path class="rim" d="M0,330 L55,248 L105,305 L165,210 L225,292 L285,240
+        L340,300 L400,196 L462,285 L520,236 L578,298 L640,218 L700,290
+        L758,250 L815,302 L872,206 L930,288 L988,244 L1045,300 L1105,224
+        L1160,292 L1200,262 L1200,400 L0,400 Z"/>
+      <path class="snow" d="M38.5,272.6 L55,248 L70,265.1 L62.1,258.8 L54.3,268.1 L46.4,262.5 Z
+        M137.4,253.7 L165,210 L192.6,247.7 L178.8,242.1 L165,248.8 L151.2,245.1 Z
+        M267,255.6 L285,240 L301.5,258 L292.9,248.1 L284.3,257.1 L275.6,246.9 Z
+        M372.4,243.8 L400,196 L428.5,236.9 L414.5,230.5 L400.5,239.6 L386.4,233.9 Z
+        M502.6,250.7 L520,236 L537.4,254.6 L528.7,246.5 L520,250.7 L511.3,244.6 Z
+        M616.4,248.4 L640,218 L662.8,245.4 L651.2,236.8 L639.6,247.2 L628,238.3 Z
+        M740.6,262 L758,250 L775.1,265.6 L766.5,256.5 L757.9,263 L749.2,254.7 Z
+        M845.8,250.2 L872,206 L898.7,243.7 L885.5,238.2 L872.2,245 L859,241.5 Z
+        M970.6,257.2 L988,244 L1005.1,260.8 L996.5,250.6 L987.9,259.3 L979.2,248.8 Z
+        M1082.2,252.9 L1105,224 L1125.9,249.8 L1115,242.4 L1104.1,250.6 L1093.1,243.9 Z"/>
+    </g>
+
+    <!-- 3 · valley rim, far then near -->
+    <g class="lyr lyr-3">
+      <path class="hill-far" d="M0,404 C90,372 160,392 236,378 C318,362 372,392
+        452,384 C540,374 596,396 676,388 C764,378 820,398 900,390
+        C984,380 1042,400 1120,392 C1156,388 1180,392 1200,390 L1200,470 L0,470 Z"/>
+    </g>
+    <g class="lyr lyr-4">
+      <path class="hill-near" d="M0,452 C86,430 150,446 228,438 C300,430 344,448
+        420,444 C500,440 552,456 632,450 C716,444 764,458 844,452
+        C928,446 986,460 1064,454 C1128,449 1170,455 1200,452 L1200,530 L0,530 Z"/>
+    </g>
+
+    <!-- 4 · Swayambhunath, lit -->
+    <g class="lyr lyr-5">
+      <path class="hill-stupa" d="M18,452 C70,404 116,378 176,374 C240,370 292,398
+        344,452 Z"/>
+      <g transform="translate(181,392) scale(0.92)">
+        <circle class="stupa-glow" cx="0" cy="-70" r="120" fill="url(#v-lampglow)"/>
+
+        <path class="flagline" d="M-5,-150 Q-97.5,-16 -190,14"/>
+        <path class="flagline" d="M5,-150 Q97.5,-16 190,14"/>
+
+        {% comment %}
+          The position lives on the outer <g> and the flutter on the inner one.
+          A CSS animation that sets `transform` overrides the SVG transform
+          attribute outright, so a single group carrying both would collapse
+          every flag onto the spire.
+        {% endcomment %}
+        <g>
+          <g transform="translate(-23.5,-124.2)"><g class="flag" style="--d:0.00s"><path fill="#3161b0" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-39.0,-104.2)"><g class="flag" style="--d:0.17s"><path fill="#eee6d8" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-54.6,-85.6)"><g class="flag" style="--d:0.34s"><path fill="#c23b2a" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-70.1,-68.6)"><g class="flag" style="--d:0.51s"><path fill="#3f8a55" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-85.7,-52.9)"><g class="flag" style="--d:0.68s"><path fill="#e0b23f" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-101.2,-38.8)"><g class="flag" style="--d:0.85s"><path fill="#3161b0" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-116.7,-26.1)"><g class="flag" style="--d:1.02s"><path fill="#eee6d8" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-132.3,-14.8)"><g class="flag" style="--d:1.19s"><path fill="#c23b2a" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-147.8,-5.1)"><g class="flag" style="--d:1.36s"><path fill="#3f8a55" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-163.4,3.2)"><g class="flag" style="--d:1.53s"><path fill="#e0b23f" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(-178.9,10.0)"><g class="flag" style="--d:1.70s"><path fill="#3161b0" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+
+          <g transform="translate(23.5,-124.2)"><g class="flag" style="--d:0.10s"><path fill="#3161b0" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(39.0,-104.2)"><g class="flag" style="--d:0.27s"><path fill="#eee6d8" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(54.6,-85.6)"><g class="flag" style="--d:0.44s"><path fill="#c23b2a" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(70.1,-68.6)"><g class="flag" style="--d:0.61s"><path fill="#3f8a55" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(85.7,-52.9)"><g class="flag" style="--d:0.78s"><path fill="#e0b23f" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(101.2,-38.8)"><g class="flag" style="--d:0.95s"><path fill="#3161b0" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(116.7,-26.1)"><g class="flag" style="--d:1.12s"><path fill="#eee6d8" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(132.3,-14.8)"><g class="flag" style="--d:1.29s"><path fill="#c23b2a" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(147.8,-5.1)"><g class="flag" style="--d:1.46s"><path fill="#3f8a55" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(163.4,3.2)"><g class="flag" style="--d:1.63s"><path fill="#e0b23f" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+          <g transform="translate(178.9,10.0)"><g class="flag" style="--d:1.80s"><path fill="#3161b0" d="M-7.5,0 L7.5,0 L7.5,14 Q0,17.5 -7.5,14 Z"/></g></g>
+        </g>
+
+        <rect class="st-plinth" x="-56" y="-2" width="112" height="12"/>
+        <rect class="st-plinth" x="-49" y="-11" width="98" height="10"/>
+        <path class="st-dome" d="M-46,-10 A46,46 0 0 1 46,-10 Z"/>
+
+        <!-- harmika: the watching face. Long lidded eyes, the urna between
+             them, and the nose as a true spiral coiling below. No mouth. -->
+        <rect class="st-gilt" x="-24" y="-82" width="48" height="34"/>
+        <rect class="st-band" x="-24" y="-82" width="48" height="4.5"/>
+        <rect class="st-band" x="-24" y="-53" width="48" height="4.5"/>
+        <g class="st-dots">
+          <circle cx="-17" cy="-79.8" r="1"/><circle cx="-8.5" cy="-79.8" r="1"/>
+          <circle cx="0" cy="-79.8" r="1"/><circle cx="8.5" cy="-79.8" r="1"/>
+          <circle cx="17" cy="-79.8" r="1"/>
+        </g>
+
+        <g>
+          <!-- blue lid band arcing over each eye -->
+          <path class="st-lid" d="M-21.5,-72.5 Q-12.5,-79.4 -3.5,-72.5"/>
+          <path class="st-lid" d="M3.5,-72.5 Q12.5,-79.4 21.5,-72.5"/>
+
+          <path class="st-eye" d="M-21,-70 Q-12.5,-74.8 -4,-70 Q-12.5,-65.8 -21,-70 Z"/>
+          <path class="st-eye" d="M4,-70 Q12.5,-74.8 21,-70 Q12.5,-65.8 4,-70 Z"/>
+          <circle class="st-iris" cx="-12.5" cy="-70" r="3.2"/>
+          <circle class="st-iris" cx="12.5" cy="-70" r="3.2"/>
+          <circle class="st-pupil" cx="-12.5" cy="-70" r="1.4"/>
+          <circle class="st-pupil" cx="12.5" cy="-70" r="1.4"/>
+          <circle class="st-glint" cx="-13.6" cy="-71.1" r="0.7"/>
+          <circle class="st-glint" cx="11.4" cy="-71.1" r="0.7"/>
+          <!-- upper lash line, drawn over the sclera -->
+          <path class="st-lash" d="M-21,-70 Q-12.5,-74.8 -4,-70"/>
+          <path class="st-lash" d="M4,-70 Q12.5,-74.8 21,-70"/>
+
+          <circle class="st-urna" cx="0" cy="-75.5" r="1.5"/>
+          <path class="st-nose" d="M0,-66 C0,-63.4 -0.70,-62.79 -0.70,-60.59 L-1.22,-60.44 L-1.69,-60.21 L-2.12,-59.92 L-2.49,-59.57 L-2.80,-59.17 L-3.03,-58.73 L-3.18,-58.27 L-3.26,-57.81 L-3.26,-57.34 L-3.18,-56.90 L-3.04,-56.47 L-2.84,-56.09 L-2.58,-55.75 L-2.28,-55.46 L-1.94,-55.23 L-1.58,-55.07 L-1.21,-54.96 L-0.83,-54.92 L-0.46,-54.94 L-0.11,-55.02 L0.21,-55.15 L0.50,-55.33 L0.76,-55.54 L0.96,-55.79 L1.12,-56.06 L1.23,-56.34 L1.29,-56.63 L1.30,-56.92 L1.26,-57.19 L1.18,-57.44 L1.07,-57.67 L0.92,-57.87 L0.75,-58.04 L0.56,-58.17 L0.36,-58.26 L0.15,-58.31 L-0.05,-58.33 L-0.24,-58.31 L-0.42,-58.26 L-0.57,-58.18"/>
+        </g>
+
+        <g class="st-gilt">
+          <rect x="-17" y="-80" width="34" height="4.2" rx="1"/>
+          <rect x="-16.1" y="-86.2" width="32.1" height="4.2" rx="1"/>
+          <rect x="-15.1" y="-92.4" width="30.2" height="4.2" rx="1"/>
+          <rect x="-14.2" y="-98.6" width="28.3" height="4.2" rx="1"/>
+          <rect x="-13.2" y="-104.8" width="26.4" height="4.2" rx="1"/>
+          <rect x="-12.3" y="-111" width="24.5" height="4.2" rx="1"/>
+          <rect x="-11.3" y="-117.2" width="22.6" height="4.2" rx="1"/>
+          <rect x="-10.3" y="-123.4" width="20.7" height="4.2" rx="1"/>
+          <rect x="-9.4" y="-129.6" width="18.8" height="4.2" rx="1"/>
+          <rect x="-8.4" y="-135.8" width="16.9" height="4.2" rx="1"/>
+          <rect x="-7.5" y="-142" width="15" height="4.2" rx="1"/>
+          <rect x="-6.5" y="-148.2" width="13.1" height="4.2" rx="1"/>
+          <rect x="-5.6" y="-154.4" width="11.2" height="4.2" rx="1"/>
+        </g>
+
+        <path class="st-gilt-f" d="M-19,-158 Q0,-172 19,-158 Q0,-163 -19,-158 Z"/>
+        <path class="st-gilt-f" d="M-2,-172 L2,-172 L2,-182 L-2,-182 Z"/>
+        <circle class="st-gilt-f" cx="0" cy="-186" r="3.4"/>
+
+        <!-- butter lamps at the base -->
+        <g class="st-lamps">
+          <circle cx="-62" cy="6" r="3.2" style="--d:0.00s"/>
+          <circle cx="-40" cy="10" r="2.6" style="--d:0.68s"/>
+          <circle cx="40" cy="10" r="2.6" style="--d:1.27s"/>
+          <circle cx="62" cy="6" r="3.2" style="--d:1.80s"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- 5 · five-tiered pagoda -->
+    <g class="lyr lyr-6">
+      <g transform="translate(858,516) scale(0.767)">
+        <g class="pg-plinth">
+          <rect x="-131" y="-14" width="262" height="14"/>
+          <rect x="-117.5" y="-28" width="235" height="14"/>
+          <rect x="-104" y="-42" width="208" height="14"/>
+          <rect x="-90.5" y="-56" width="181" height="14"/>
+          <rect x="-77" y="-70" width="154" height="14"/>
+        </g>
+
+        <!-- five-level plinth, 33 steps, five pairs of guardians -->
+        <g class="pg-plinth">
+          <rect x="-134" y="-28" width="268" height="28"/>
+          <rect x="-120.5" y="-56" width="241" height="28"/>
+          <rect x="-107" y="-84" width="214" height="28"/>
+          <rect x="-93.5" y="-112" width="187" height="28"/>
+          <rect x="-80" y="-140" width="160" height="28"/>
+        </g>
+        <path class="pg-stair" d="M-30.0,0 L30.0,0 L18.0,-140 L-18.0,-140 Z"/>
+        <g class="pg-steps"><path d="M-27.6,-4.2 L27.6,-4.2 M-27.3,-8.5 L27.3,-8.5 M-26.9,-12.7 L26.9,-12.7 M-26.5,-17.0 L26.5,-17.0 M-26.2,-21.2 L26.2,-21.2 M-25.8,-25.5 L25.8,-25.5 M-25.5,-29.7 L25.5,-29.7 M-25.1,-33.9 L25.1,-33.9 M-24.7,-38.2 L24.7,-38.2 M-24.4,-42.4 L24.4,-42.4 M-24.0,-46.7 L24.0,-46.7 M-23.6,-50.9 L23.6,-50.9 M-23.3,-55.2 L23.3,-55.2 M-22.9,-59.4 L22.9,-59.4 M-22.5,-63.6 L22.5,-63.6 M-22.2,-67.9 L22.2,-67.9 M-21.8,-72.1 L21.8,-72.1 M-21.5,-76.4 L21.5,-76.4 M-21.1,-80.6 L21.1,-80.6 M-20.7,-84.8 L20.7,-84.8 M-20.4,-89.1 L20.4,-89.1 M-20.0,-93.3 L20.0,-93.3 M-19.6,-97.6 L19.6,-97.6 M-19.3,-101.8 L19.3,-101.8 M-18.9,-106.1 L18.9,-106.1 M-18.5,-110.3 L18.5,-110.3 M-18.2,-114.5 L18.2,-114.5 M-17.8,-118.8 L17.8,-118.8 M-17.5,-123.0 L17.5,-123.0 M-17.1,-127.3 L17.1,-127.3 M-16.7,-131.5 L16.7,-131.5 M-16.4,-135.8 L16.4,-135.8"/></g>
+        <g class="pg-guardian">
+          <path d="M-47.6,-28 L-47.6,-35 Q-47.6,-39 -42.6,-40 Q-37.6,-39 -37.6,-35 L-37.6,-28 Z"/>
+          <circle cx="-42.6" cy="-43.0" r="3.1"/>
+          <path d="M37.6,-28 L37.6,-35 Q37.6,-39 42.6,-40 Q47.6,-39 47.6,-35 L47.6,-28 Z"/>
+          <circle cx="42.6" cy="-43.0" r="3.1"/>
+          <path d="M-45.2,-56 L-45.2,-63 Q-45.2,-67 -40.2,-68 Q-35.2,-67 -35.2,-63 L-35.2,-56 Z"/>
+          <circle cx="-40.2" cy="-71.0" r="3.1"/>
+          <path d="M35.2,-56 L35.2,-63 Q35.2,-67 40.2,-68 Q45.2,-67 45.2,-63 L45.2,-56 Z"/>
+          <circle cx="40.2" cy="-71.0" r="3.1"/>
+          <path d="M-42.8,-84 L-42.8,-91 Q-42.8,-95 -37.8,-96 Q-32.8,-95 -32.8,-91 L-32.8,-84 Z"/>
+          <circle cx="-37.8" cy="-99.0" r="3.1"/>
+          <path d="M32.8,-84 L32.8,-91 Q32.8,-95 37.8,-96 Q42.8,-95 42.8,-91 L42.8,-84 Z"/>
+          <circle cx="37.8" cy="-99.0" r="3.1"/>
+          <path d="M-40.4,-112 L-40.4,-119 Q-40.4,-123 -35.4,-124 Q-30.4,-123 -30.4,-119 L-30.4,-112 Z"/>
+          <circle cx="-35.4" cy="-127.0" r="3.1"/>
+          <path d="M30.4,-112 L30.4,-119 Q30.4,-123 35.4,-124 Q40.4,-123 40.4,-119 L40.4,-112 Z"/>
+          <circle cx="35.4" cy="-127.0" r="3.1"/>
+          <path d="M-38.0,-140 L-38.0,-147 Q-38.0,-151 -33.0,-152 Q-28.0,-151 -28.0,-147 L-28.0,-140 Z"/>
+          <circle cx="-33.0" cy="-155.0" r="3.1"/>
+          <path d="M28.0,-140 L28.0,-147 Q28.0,-151 33.0,-152 Q38.0,-151 38.0,-147 L38.0,-140 Z"/>
+          <circle cx="33.0" cy="-155.0" r="3.1"/>
+        </g>
+
+        <!-- tier 1  (roof half 122 over wall half 58 = 2.10x overhang) -->
+        <rect class="pg-wall" x="-58" y="-202" width="116" height="62"/>
+        <!-- Veranda columns stand forward of the wall (half 58) but must land on
+             the top plinth step, whose half-width is 80. Anything beyond that
+             overhangs the edge and stands on nothing. -->
+        <g class="pg-post"><path d="M-66,-140 L-66,-196 M-36,-140 L-36,-196 M36,-140 L36,-196 M66,-140 L66,-196"/></g>
+        <path class="pg-doorlight" d="M-13,-140 L-13,-178 Q0,-188 13,-178 L13,-140 Z"/>
+        <path class="pg-cornice" d="M-61,-202 L61,-202 L61,-196 L-61,-196 Z"/>
+        <g class="pg-strut"><path d="M-9.3,-205 L-19.5,-199 M9.3,-205 L19.5,-199 M-24.4,-205 L-51.2,-199 M24.4,-205 L51.2,-199 M-39.4,-205 L-83.0,-199 M39.4,-205 L83.0,-199 M-54.5,-205 L-114.7,-199 M54.5,-205 L114.7,-199"/></g>
+        <path class="pg-roof" d="M-60,-222 L60,-222 L122,-197 Q0,-204 -122,-197 Z"/>
+        <path class="pg-course" d="M82.3,-213.0 Q0,-215.5 -82.3,-213.0"/>
+        <path class="pg-course" d="M102.2,-205.0 Q0,-209.8 -102.2,-205.0"/>
+        <path class="pg-trim" d="M122,-197 Q0,-204 -122,-197"/>
+        <path class="pg-ridge" d="M-60,-222 L60,-222"/>
+        <g class="pg-bell"><circle cx="102.5" cy="-194.6" r="1.5"/><circle cx="68.3" cy="-196.0" r="1.5"/><circle cx="34.2" cy="-196.8" r="1.5"/><circle cx="0.0" cy="-197.1" r="1.5"/><circle cx="-34.2" cy="-196.8" r="1.5"/><circle cx="-68.3" cy="-196.0" r="1.5"/><circle cx="-102.5" cy="-194.6" r="1.5"/></g>
+
+        <!-- tier 2  (roof half 106 over wall half 50 = 2.12x overhang) -->
+        <rect class="pg-wall" x="-50" y="-274" width="100" height="52"/>
+        <path class="pg-win" d="M-14,-236 L-14,-258 Q0,-266 14,-258 L14,-236 Z"/>
+        <path class="pg-cornice" d="M-53,-274 L53,-274 L53,-268 L-53,-268 Z"/>
+        <g class="pg-strut"><path d="M-8.0,-277 L-17.0,-271 M8.0,-277 L17.0,-271 M-21.0,-277 L-44.5,-271 M21.0,-277 L44.5,-271 M-34.0,-277 L-72.1,-271 M34.0,-277 L72.1,-271 M-47.0,-277 L-99.6,-271 M47.0,-277 L99.6,-271"/></g>
+        <path class="pg-roof" d="M-52,-292 L52,-292 L106,-269 Q0,-276 -106,-269 Z"/>
+        <path class="pg-course" d="M71.4,-283.7 Q0,-286.2 -71.4,-283.7"/>
+        <path class="pg-course" d="M88.7,-276.4 Q0,-281.1 -88.7,-276.4"/>
+        <path class="pg-trim" d="M106,-269 Q0,-276 -106,-269"/>
+        <path class="pg-ridge" d="M-52,-292 L52,-292"/>
+        <g class="pg-bell"><circle cx="89.0" cy="-266.6" r="1.5"/><circle cx="59.4" cy="-268.0" r="1.5"/><circle cx="29.7" cy="-268.8" r="1.5"/><circle cx="0.0" cy="-269.1" r="1.5"/><circle cx="-29.7" cy="-268.8" r="1.5"/><circle cx="-59.4" cy="-268.0" r="1.5"/><circle cx="-89.0" cy="-266.6" r="1.5"/></g>
+
+        <!-- tier 3  (roof half 90 over wall half 43 = 2.09x overhang) -->
+        <rect class="pg-wall" x="-43" y="-336" width="86" height="44"/>
+        <path class="pg-cornice" d="M-46,-336 L46,-336 L46,-330 L-46,-330 Z"/>
+        <g class="pg-strut"><path d="M-6.9,-339 L-14.4,-333 M6.9,-339 L14.4,-333 M-18.1,-339 L-37.8,-333 M18.1,-339 L37.8,-333 M-29.2,-339 L-61.2,-333 M29.2,-339 L61.2,-333 M-40.4,-339 L-84.6,-333 M40.4,-339 L84.6,-333"/></g>
+        <path class="pg-roof" d="M-45,-352 L45,-352 L90,-331 Q0,-338 -90,-331 Z"/>
+        <path class="pg-course" d="M61.2,-344.4 Q0,-347.0 -61.2,-344.4"/>
+        <path class="pg-course" d="M75.6,-337.7 Q0,-342.5 -75.6,-337.7"/>
+        <path class="pg-trim" d="M90,-331 Q0,-338 -90,-331"/>
+        <path class="pg-ridge" d="M-45,-352 L45,-352"/>
+        <g class="pg-bell"><circle cx="75.6" cy="-328.6" r="1.5"/><circle cx="50.4" cy="-330.0" r="1.5"/><circle cx="25.2" cy="-330.8" r="1.5"/><circle cx="0.0" cy="-331.1" r="1.5"/><circle cx="-25.2" cy="-330.8" r="1.5"/><circle cx="-50.4" cy="-330.0" r="1.5"/><circle cx="-75.6" cy="-328.6" r="1.5"/></g>
+
+        <!-- tier 4  (roof half 74 over wall half 35 = 2.11x overhang) -->
+        <rect class="pg-wall" x="-35" y="-390" width="70" height="38"/>
+        <path class="pg-cornice" d="M-38,-390 L38,-390 L38,-384 L-38,-384 Z"/>
+        <g class="pg-strut"><path d="M-5.6,-393 L-11.8,-387 M5.6,-393 L11.8,-387 M-14.7,-393 L-31.1,-387 M14.7,-393 L31.1,-387 M-23.8,-393 L-50.3,-387 M23.8,-393 L50.3,-387 M-32.9,-393 L-69.6,-387 M32.9,-393 L69.6,-387"/></g>
+        <path class="pg-roof" d="M-37,-405 L37,-405 L74,-385 Q0,-392 -74,-385 Z"/>
+        <path class="pg-course" d="M50.3,-397.8 Q0,-400.3 -50.3,-397.8"/>
+        <path class="pg-course" d="M62.2,-391.4 Q0,-396.2 -62.2,-391.4"/>
+        <path class="pg-trim" d="M74,-385 Q0,-392 -74,-385"/>
+        <path class="pg-ridge" d="M-37,-405 L37,-405"/>
+        <g class="pg-bell"><circle cx="62.2" cy="-382.6" r="1.5"/><circle cx="41.4" cy="-384.0" r="1.5"/><circle cx="20.7" cy="-384.8" r="1.5"/><circle cx="0.0" cy="-385.1" r="1.5"/><circle cx="-20.7" cy="-384.8" r="1.5"/><circle cx="-41.4" cy="-384.0" r="1.5"/><circle cx="-62.2" cy="-382.6" r="1.5"/></g>
+
+        <!-- tier 5  (roof half 58 over wall half 28 = 2.07x overhang) -->
+        <rect class="pg-wall" x="-28" y="-437" width="56" height="32"/>
+        <path class="pg-cornice" d="M-31,-437 L31,-437 L31,-431 L-31,-431 Z"/>
+        <g class="pg-strut"><path d="M-4.5,-440 L-9.3,-434 M4.5,-440 L9.3,-434 M-11.8,-440 L-24.4,-434 M11.8,-440 L24.4,-434 M-19.0,-440 L-39.4,-434 M19.0,-440 L39.4,-434 M-26.3,-440 L-54.5,-434 M26.3,-440 L54.5,-434"/></g>
+        <path class="pg-roof" d="M-26,-451 L26,-451 L58,-432 Q0,-439 -58,-432 Z"/>
+        <path class="pg-course" d="M37.5,-444.2 Q0,-446.7 -37.5,-444.2"/>
+        <path class="pg-course" d="M47.8,-438.1 Q0,-442.8 -47.8,-438.1"/>
+        <path class="pg-trim" d="M58,-432 Q0,-439 -58,-432"/>
+        <path class="pg-ridge" d="M-26,-451 L26,-451"/>
+        <g class="pg-bell"><circle cx="48.7" cy="-429.6" r="1.5"/><circle cx="32.5" cy="-431.0" r="1.5"/><circle cx="16.2" cy="-431.8" r="1.5"/><circle cx="0.0" cy="-432.1" r="1.5"/><circle cx="-16.2" cy="-431.8" r="1.5"/><circle cx="-32.5" cy="-431.0" r="1.5"/><circle cx="-48.7" cy="-429.6" r="1.5"/></g>
+
+        <!-- gājula, the golden pinnacle -->
+        <path class="pg-finial" d="M-12,-451 Q0,-463 12,-451 Q0,-456 -12,-451 Z"/>
+        <path class="pg-finial" d="M-2.4,-462 L2.4,-462 L2.4,-477 L-2.4,-477 Z"/>
+        <circle class="pg-finial" cx="0" cy="-481" r="4"/>
+      </g>
+    </g>
+
+    <!-- 6 · morning fog, drifting on an exact 800-unit period -->
+    <g class="lyr lyr-7">
+      <g class="fog fog-a">
+        <ellipse cx="200" cy="486" rx="290" ry="19" fill="url(#v-fog)"/>
+        <ellipse cx="700" cy="500" rx="330" ry="16" fill="url(#v-fog)"/>
+        <ellipse cx="1000" cy="486" rx="290" ry="19" fill="url(#v-fog)"/>
+        <ellipse cx="1500" cy="500" rx="330" ry="16" fill="url(#v-fog)"/>
+      </g>
+      <g class="fog fog-b">
+        <ellipse cx="60" cy="516" rx="340" ry="15" fill="url(#v-fog)"/>
+        <ellipse cx="620" cy="524" rx="300" ry="13" fill="url(#v-fog)"/>
+        <ellipse cx="860" cy="516" rx="340" ry="15" fill="url(#v-fog)"/>
+        <ellipse cx="1420" cy="524" rx="300" ry="13" fill="url(#v-fog)"/>
+      </g>
+    </g>
+
+    <!-- 7 · Newar townhouses, windows lit per instance -->
+    <g class="lyr lyr-8">
+      <g>
+      <g style="--d:0.00s">
+        <circle class="lp-glow" cx="42" cy="559.3" r="34"/>
+        <use href="#st-lamp" x="31.8" y="557.6" width="20.4" height="54.4"/>
+      </g>
+      <g style="--d:0.30s">
+        <circle class="lp-glow" cx="208" cy="553.7" r="40"/>
+        <use href="#st-lamp" x="196.7" y="551.8" width="22.6" height="60.2"/>
+      </g>
+      <g style="--d:0.60s">
+        <circle class="lp-glow" cx="470" cy="548.1" r="46"/>
+        <use href="#st-lamp" x="457.6" y="546.1" width="24.7" height="65.9"/>
+      </g>
+      <g style="--d:0.90s">
+        <circle class="lp-glow" cx="560" cy="559.3" r="34"/>
+        <use href="#st-lamp" x="549.8" y="557.6" width="20.4" height="54.4"/>
+      </g>
+      <g style="--d:1.20s">
+        <circle class="lp-glow" cx="840" cy="553.7" r="40"/>
+        <use href="#st-lamp" x="828.7" y="551.8" width="22.6" height="60.2"/>
+      </g>
+      <g style="--d:1.50s">
+        <circle class="lp-glow" cx="916" cy="548.1" r="46"/>
+        <use href="#st-lamp" x="903.6" y="546.1" width="24.7" height="65.9"/>
+      </g>
+      <g style="--d:1.80s">
+        <circle class="lp-glow" cx="1148" cy="559.3" r="34"/>
+        <use href="#st-lamp" x="1137.8" y="557.6" width="20.4" height="54.4"/>
+      </g>
+      </g>
+
+      <use href="#nw-house" x="-24" y="472" width="132" height="150"
+           style="--lit-a:1;--lit-b:0;--lit-d:1;--fa:1.23s;--fb:1.11s"/>
+      <use href="#nw-house" x="96" y="500" width="104" height="122"
+           style="--lit-a:0;--lit-b:1;--lit-d:0;--fa:0.14s;--fb:0.94s"/>
+      <use href="#nw-house" x="196" y="481" width="122" height="141"
+           style="--lit-a:1;--lit-b:1;--lit-d:1;--fa:1.48s;--fb:0.38s"/>
+      <use href="#nw-house" x="304" y="506" width="96" height="116"
+           style="--lit-a:0;--lit-b:0;--lit-d:0;--fa:0.95s;--fb:0.78s"/>
+      <use href="#nw-house" x="388" y="464" width="140" height="158"
+           style="--lit-a:1;--lit-b:0;--lit-d:1;--fa:1.13s;--fb:0.94s"/>
+      <use href="#nw-house" x="512" y="494" width="110" height="128"
+           style="--lit-a:1;--lit-b:1;--lit-d:0;--fa:0.42s;--fb:1.22s"/>
+      <use href="#nw-house" x="608" y="474" width="126" height="148"
+           style="--lit-a:0;--lit-b:1;--lit-d:1;--fa:0.28s;--fb:0.75s"/>
+      <use href="#nw-house" x="720" y="504" width="100" height="118"
+           style="--lit-a:1;--lit-b:0;--lit-d:0;--fa:1.14s;--fb:0.58s"/>
+      <use href="#nw-house" x="806" y="470" width="136" height="152"
+           style="--lit-a:1;--lit-b:1;--lit-d:1;--fa:1.73s;--fb:1.30s"/>
+      <use href="#nw-house" x="926" y="498" width="108" height="124"
+           style="--lit-a:0;--lit-b:1;--lit-d:0;--fa:0.26s;--fb:1.50s"/>
+      <use href="#nw-house" x="1018" y="482" width="120" height="140"
+           style="--lit-a:1;--lit-b:0;--lit-d:1;--fa:0.61s;--fb:0.80s"/>
+      <use href="#nw-house" x="1120" y="496" width="104" height="126"
+           style="--lit-a:0;--lit-b:1;--lit-d:1;--fa:0.93s;--fb:1.80s"/>
+
+      <rect x="0" y="540" width="1200" height="80" fill="url(#v-ground)"/>
+    </g>
+
+    <!-- 8 · EV charging posts along the street -->
+    <g class="lyr lyr-9">
+      <g transform="translate(112,612) scale(0.9)" style="--d:0.00s">
+        <use href="#ev-post" x="-20" y="-70" width="40" height="70"/>
+      </g>
+      <g transform="translate(286,612) scale(0.78)" style="--d:1.11s">
+        <use href="#ev-post" x="-20" y="-70" width="40" height="70"/>
+      </g>
+      <g transform="translate(686,612) scale(0.84)" style="--d:0.51s">
+        <use href="#ev-post" x="-20" y="-70" width="40" height="70"/>
+      </g>
+      <g transform="translate(1004,612) scale(0.72)" style="--d:1.80s">
+        <use href="#ev-post" x="-20" y="-70" width="40" height="70"/>
+      </g>
+
+      <!-- two cars on charge -->
+      <g transform="translate(348,612)">
+        <path class="car-body" d="M-46,0 L-46,-14 Q-44,-22 -34,-24 L-18,-33
+          Q-2,-36 14,-33 L30,-24 Q42,-22 44,-14 L44,0 Z"/>
+        <path class="car-glass" d="M-30,-24 L-16,-31 Q-1,-33.6 12,-31 L26,-24 Z"/>
+        <circle class="car-wheel" cx="-28" cy="0" r="7.5"/>
+        <circle class="car-wheel" cx="26" cy="0" r="7.5"/>
+        <circle class="car-tail" cx="-45" cy="-11" r="2.6"/>
+      </g>
+      <g transform="translate(1064,612) scale(0.82)">
+        <path class="car-body" d="M-46,0 L-46,-14 Q-44,-22 -34,-24 L-18,-33
+          Q-2,-36 14,-33 L30,-24 Q42,-22 44,-14 L44,0 Z"/>
+        <path class="car-glass" d="M-30,-24 L-16,-31 Q-1,-33.6 12,-31 L26,-24 Z"/>
+        <circle class="car-wheel" cx="-28" cy="0" r="7.5"/>
+        <circle class="car-wheel" cx="26" cy="0" r="7.5"/>
+        <circle class="car-tail" cx="-45" cy="-11" r="2.6"/>
+      </g>
+    </g>
+
+    <!-- 9 · birds -->
+    <g class="lyr lyr-10">
+      <g class="flock flock-a">
+        <path class="bird" d="M0,0 q5,-4 10,0 q5,4 10,0"/>
+        <path class="bird" d="M24,14 q4,-3 8,0 q4,3 8,0"/>
+        <path class="bird" d="M-16,20 q4,-3 8,0 q4,3 8,0"/>
+        <path class="bird" d="M14,32 q3,-2.4 6,0 q3,2.4 6,0"/>
+      </g>
+      <g class="flock flock-b">
+        <path class="bird" d="M0,0 q4,-3 8,0 q4,3 8,0"/>
+        <path class="bird" d="M20,11 q3,-2.4 6,0 q3,2.4 6,0"/>
+        <path class="bird" d="M-12,16 q3,-2.4 6,0 q3,2.4 6,0"/>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<section class="valley-hero">
+  <div class="valley-title">
+    <p class="valley-eyebrow">About</p>
+    <h1 class="valley-name">
+      <span class="valley-name-np" lang="new">विपिन महर्जन</span>
+      <span class="valley-name-en">Bipin Maharjan</span>
+    </h1>
+    <p class="valley-strap">
+      Electrical engineer · Kathmandu Valley · power electronics and control
+    </p>
+  </div>
+</section>
+
+<div class="valley-reader">
+  <section class="wrap section valley-section">
+    <p class="section-mark">Now</p>
+    <div class="section-body">
+      <div class="valley-prose">
+        <p>
+          I grew up in the Kathmandu Valley, and my family is Newar — the people
+          who built the brick-and-timber towns the scene behind this page is
+          made of. I am an electrical engineer, finishing an MSc in Power
+          Electronics and Drive Engineering at the Institute of Engineering,
+          Pulchowk Campus. My work is on grid-forming inverters: the control
+          that lets a converter hold up a grid by itself rather than follow
+          someone else's, and what happens to it when that grid is weak —
+          current limiting through a fault, and how a microgrid behaves once it
+          is islanded. My thesis applies that to EV charging stations, which is
+          why there are charging posts in the street below. More in the
+          <a href="{{ '/' | relative_url }}#research">research section</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section valley-section">
+    <p class="section-mark">Before</p>
+    <div class="section-body">
+      <div class="valley-prose">
+        <p>
+          Before the MSc the work was in the field, and I still do some of it. I
+          rebuilt and commissioned the damaged governor of a 2.5 MW unit at
+          Indrawati III, which is back in service and still running, and earlier
+          did the desk study for a 40 MW solar PV project and substation design
+          at NEA Engineering. That period is why I am cautious about simulation
+          results: a governor that behaves perfectly in a model and hunts on the
+          real machine teaches you something no amount of further simulation
+          will.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section valley-section valley-section-end">
+    <p class="section-mark">Contact</p>
+    <div class="section-body">
+      <div class="valley-prose">
+        <p>
+          I am happy to hear from anyone working on inverter control, microgrids,
+          or hydropower automation — including about the parts that did not work.
+        </p>
+        <p class="valley-links">
+          <a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a>
+          <a href="{{ '/cv/' | relative_url }}">CV</a>
+          {% if site.contact.linkedin != "" %}<a href="{{ site.contact.linkedin }}">LinkedIn</a>{% endif %}
+          {% if site.contact.github != "" %}<a href="https://github.com/{{ site.contact.github }}">GitHub</a>{% endif %}
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
