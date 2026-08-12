@@ -58,28 +58,67 @@ the sitemap — updates itself.
 
 ## Optional: preview locally
 
-Needs Ruby.
+Needs Ruby **with** the MSYS2 devkit — several gems in the `github-pages` set
+(`commonmarker`, `eventmachine`, `http_parser.rb`) build native extensions.
+Ruby 3.3 matches what GitHub Pages itself runs.
 
 ```bash
+winget install --id RubyInstallerTeam.RubyWithDevKit.3.3 --source winget
 bundle install
 bundle exec jekyll serve
 ```
 
 Then open `http://localhost:4000`.
 
+`tzinfo-data` is in the Gemfile because Windows has no zoneinfo database and
+the `timezone:` in `_config.yml` cannot resolve without it. It is platform-
+gated, so it costs Linux and macOS nothing.
+
+### If gem downloads fail with a certificate error
+
+Avast's Web/Mail Shield terminates TLS and re-signs with its own root, which it
+adds to the Windows certificate store. Ruby ships its own CA bundle and ignores
+that store, so RubyGems rejects the substituted certificate:
+
+```
+SSL verification error at depth 0: unable to get local issuer certificate
+```
+
+Either turn off HTTPS scanning in Avast, or hand Ruby a bundle that includes
+the root:
+
+```powershell
+$cert = Get-ChildItem Cert:\LocalMachine\Root | Where-Object { $_.Subject -match "Avast" }
+$b64  = [Convert]::ToBase64String($cert.RawData, 'InsertLineBreaks')
+$pem  = "-----BEGIN CERTIFICATE-----`n$b64`n-----END CERTIFICATE-----`n"
+[IO.File]::WriteAllText("$HOME\.ssl\ca-bundle-avast.pem",
+  (Get-Content C:\Ruby33-x64\bin\etc\ssl\cert.pem -Raw) + "`n" + $pem)
+$env:SSL_CERT_FILE = "$HOME\.ssl\ca-bundle-avast.pem"
+```
+
+The same interception breaks `uv` (`UV_SYSTEM_CERTS=1`), npm
+(`NODE_OPTIONS=--use-system-ca`) and winget (`--source winget`, to skip the
+`msstore` source it cannot verify). It is antivirus rather than a proxy, so it
+follows the machine between networks.
+
 ## Structure
 
 ```
-_config.yml            site settings and your links
-_layouts/              page shells (default, post)
-_posts/                blog posts, one markdown file each
-assets/css/style.css   all styling, tokens at the top
-assets/js/site.js      theme toggle, scroll reveal, research disclosures
-assets/js/hero-sim.js  the live hero simulation
-index.html             homepage: hero simulation, research, recent posts
-writing.html           full post list
-about.md               about page
-CNAME                  tells GitHub Pages which domain to serve
+_config.yml               site settings and your links
+_layouts/                 page shells (default, post)
+_posts/                   blog posts, one markdown file each
+_includes/                generated SVG, inlined at build time
+assets/css/style.css      all styling, tokens at the top
+assets/css/valley.css     art direction for the About page scene
+assets/css/koopman.css    lights the Koopman figure
+assets/js/site.js         theme toggle, scroll reveal, research disclosures
+assets/js/hero-sim.js     the live hero simulation
+blender/koopman_lift.py   generates the Koopman figure (excluded from the build)
+blender/koopman_lift.blend  its authoring document — camera and framing
+index.html                homepage: hero simulation, research, recent posts
+writing.html              full post list
+about.html                about page
+CNAME                     tells GitHub Pages which domain to serve
 ```
 
 ## Design notes
@@ -116,3 +155,36 @@ computed from the traces, so it cannot silently disagree with the plot.
 Everything is progressive enhancement. Without JavaScript the original hand-drawn SVG
 still renders with its CSS draw animation, the sliders and metric table stay hidden, and
 the research entries still expand, because they are `<details>` elements.
+
+## The Koopman figure
+
+The drawing inside the thesis panel is modelled in Blender and shipped as inline
+SVG. No 3D reaches the browser and there is no runtime dependency:
+`blender/koopman_lift.py` integrates the swing equation, builds the scene, and
+projects it through Blender's own camera to emit paths.
+
+```bash
+blender --background --factory-startup --python blender/koopman_lift.py
+```
+
+That rewrites `_includes/koopman-lift.svg` and re-saves the `.blend`. To change
+the framing, open `blender/koopman_lift.blend`, move the camera, and re-run with
+`-- --from-blend` to reuse it. Annotation placement is derived from the
+projection — which corner carries the ground axes, and where the vertical ruler
+goes — so the labels follow the camera rather than needing to be nudged.
+
+Do not hand-edit the SVG; the next run overwrites it. Plant constants (`D`,
+`P_SET`, the initial angle) are at the top of the script, and the sheet is the
+graph of the observable itself, so retuning them moves both levels together.
+
+The SVG carries no colour. Every stroke is `stroke="currentColor"` plus a class,
+lit from `koopman.css` out of the same tokens as everything else — the same
+arrangement as the valley scene, and the reason the figure follows the theme
+with no second palette to maintain. `--signal` and `--ink-faint` keep the
+meaning they have in the hero legend: the Koopman result against its baseline.
+
+The trajectories draw on when the disclosure opens rather than on load, because
+the panel starts closed. Only the lifted path animates its dash array — the
+state-space path is dashed at rest, and animating `stroke-dasharray` would end
+it solid, since `both` holds the animation's last frame and not the declared
+style.
