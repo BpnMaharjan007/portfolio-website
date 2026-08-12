@@ -16,6 +16,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Martel:wght@400;600;800&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/valley.css' | relative_url }}">
   {% endif %}
+  {% comment %}
+    The Koopman figure is inline SVG carrying no colour of its own; this is
+    what lights it. Gated like the two above so pages without the figure do
+    not pay for it.
+  {% endcomment %}
+  {% if page.koopman %}
+  <link rel="stylesheet" href="{{ '/assets/css/koopman.css' | relative_url }}">
+  {% endif %}
   {% seo %}
   {% feed_meta %}
   <script>

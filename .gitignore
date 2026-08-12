@@ -4,3 +4,7 @@ _site/
 .jekyll-metadata
 vendor/
 .DS_Store
+
+# Blender's rolling backup of the previous save. The .blend itself is
+# tracked -- it is the figure's authoring document, not a build artifact.
+*.blend1
