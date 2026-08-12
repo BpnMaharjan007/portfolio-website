@@ -62,6 +62,7 @@ body.valley {
   --lamp: #f7c579;
 
   /* Sky and light */
+  --v-sky-0: #1e4a80;
   --v-sky-1: #3f6fa8;
   --v-sky-2: #6f9ac6;
   --v-sky-3: #a8c2d6;
@@ -212,6 +213,7 @@ body.valley {
     --mist: #ece4d6;
     --lamp: #f7c579;
 
+    --v-sky-0: #03040c;
     --v-sky-1: #080a1c;
     --v-sky-2: #101433;
     --v-sky-3: #1d1d47;
@@ -344,6 +346,7 @@ body.valley {
   --mist: #ece4d6;
   --lamp: #f7c579;
 
+  --v-sky-0: #03040c;
   --v-sky-1: #080a1c;
   --v-sky-2: #101433;
   --v-sky-3: #1d1d47;
@@ -721,6 +724,7 @@ body.valley .section-mark {
    --------------------------------------------------------------- */
 /* Gradient stops. CSS overrides the presentation attributes the SVG carries,
    which is what lets the sky, the glows and the fog switch with the theme. */
+.g-sky-0 { stop-color: var(--v-sky-0); }
 .g-sky-1 { stop-color: var(--v-sky-1); }
 .g-sky-2 { stop-color: var(--v-sky-2); }
 .g-sky-3 { stop-color: var(--v-sky-3); }
@@ -1008,6 +1012,12 @@ body.valley .section-mark {
   animation: v-twinkle var(--t, 4s) ease-in-out infinite;
   animation-delay: var(--d, 0s);
 }
+
+/* The far field over the extended sky mostly holds steady. Animating every
+   one of those on top of the hand-placed stars is hundreds of extra
+   animations for a phone to run behind a page of prose, and distant stars
+   that do not twinkle is the truer picture anyway. */
+.stars circle.far { animation: none; }
 
 /* transform-box is what makes transform-origin resolve against the element's
    own box rather than the SVG viewport — without it every flag pivots about
