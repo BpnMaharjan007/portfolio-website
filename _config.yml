@@ -1,23 +1,25 @@
 title: Bipin Maharjan
-tagline: Data-driven control for microgrids
+tagline: Power electronics, control and microgrids
 description: >-
-  Graduate electrical engineering researcher working on Koopman operator
-  methods, model predictive control, and reinforcement learning for
-  grid-forming inverters in islanded AC microgrids.
+  Electrical engineer in Kathmandu working on grid-forming inverter control —
+  Koopman operator methods, model predictive control and reinforcement learning
+  — alongside hydropower governor commissioning and PLC/SCADA work.
 
 url: "https://bipinmaharjan7.com.np"
 baseurl: ""
 
 author:
   name: Bipin Maharjan
-  role: Graduate researcher, electrical engineering
+  role: Electrical engineer &middot; power electronics and control
+  location: Kathmandu, Nepal
 
 contact:
   email: bipin.mhr22@gmail.com
   github: BpnMaharjan007
   scholar: ""
-  linkedin: ""
+  linkedin: "https://linkedin.com/in/maharjanbipin"
   orcid: ""
+  cv: /assets/files/Bipin-Maharjan-CV.pdf
 
 markdown: kramdown
 permalink: /writing/:title/

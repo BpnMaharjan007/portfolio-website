@@ -1,0 +1,222 @@
+---
+layout: default
+title: CV
+permalink: /cv/
+description: >-
+  Curriculum vitae — Bipin Maharjan, electrical engineer working in power
+  electronics, control, hydropower governor systems and solar PV.
+---
+
+<section class="wrap cv-head">
+  <p class="eyebrow">Curriculum vitae</p>
+  <h1 class="prose-title">{{ site.author.name }}</h1>
+  <p class="cv-strap">Electrical Engineer &middot; Power Electronics and Control</p>
+
+  <p class="cv-contact">
+    <span>{{ site.author.location }}</span>
+    <a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a>
+    {% if site.contact.linkedin != "" %}<a href="{{ site.contact.linkedin }}">LinkedIn</a>{% endif %}
+    {% if site.contact.github != "" %}<a href="https://github.com/{{ site.contact.github }}">GitHub</a>{% endif %}
+  </p>
+
+  <p class="hero-actions">
+    <a class="btn" href="{{ site.contact.cv | relative_url }}">Download PDF</a>
+    <a class="btn btn-quiet" href="{{ '/' | relative_url }}#research">Research in depth</a>
+  </p>
+
+  <p class="cv-profile">
+    Electrical engineer completing an MSc in Power Electronics and Drive Engineering,
+    with hands-on experience in hydropower governor rebuild and commissioning, PLC and
+    SCADA control programming, utility-scale solar PV studies, and substation and
+    transmission line work — supported by a control design and simulation background in
+    MATLAB/Simulink and Python.
+  </p>
+</section>
+
+<section class="band">
+  <div class="wrap section">
+    <h2 class="section-mark">Education</h2>
+    <div class="section-body">
+      <ol class="cv-list">
+        <li class="cv-item">
+          <div class="cv-item-head">
+            <h3 class="cv-role">MSc in Power Electronics and Drive Engineering</h3>
+            <p class="cv-when">2025 &ndash; present</p>
+          </div>
+          <p class="cv-where">Institute of Engineering, Pulchowk Campus, Kathmandu</p>
+          <ul class="cv-points">
+            <li>First semester completed &mdash; 89.75%.</li>
+            <li>
+              Thesis in progress: grid-forming inverters for electric vehicle charging
+              stations, to strengthen distribution grid resilience.
+            </li>
+          </ul>
+        </li>
+
+        <li class="cv-item">
+          <div class="cv-item-head">
+            <h3 class="cv-role">BE in Electrical Engineering</h3>
+            <p class="cv-when">2018 &ndash; 2023</p>
+          </div>
+          <p class="cv-where">National College of Engineering, Talchhikhel, Lalitpur (IOE, Pulchowk)</p>
+          <ul class="cv-points">
+            <li>Overall distinction &mdash; 81.69%.</li>
+            <li>Dean's List, second and fourth semesters.</li>
+            <li>Second year topper, overall faculty.</li>
+            <li>Member and Secretary, Electrical Club.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section">
+  <h2 class="section-mark">Experience</h2>
+  <div class="section-body">
+    <ol class="cv-list">
+      <li class="cv-item">
+        <div class="cv-item-head">
+          <h3 class="cv-role">Electro-Mechanical Consultant <span class="cv-mode">(freelance)</span></h3>
+          <p class="cv-when">2024 &ndash; present</p>
+        </div>
+        <p class="cv-where">National Hydro Power Co. Ltd.</p>
+        <ul class="cv-points">
+          <li>
+            Rebuilt and commissioned the damaged 4WT1000-4.0XT governor system of the
+            2.5 MW Indrawati III unit, with the associated electro-mechanical
+            consulting. The unit was returned to service and remains in operation.
+          </li>
+          <li>
+            Reviewed and redesigned the unit frequency and gate control program
+            (Siemens S7-1200, TIA Portal V17).
+          </li>
+          <li>Authored the damage assessment report.</li>
+        </ul>
+      </li>
+
+      <li class="cv-item">
+        <div class="cv-item-head">
+          <h3 class="cv-role">Electrical Engineering Intern</h3>
+          <p class="cv-when">2023</p>
+        </div>
+        <p class="cv-where">NEA Engineering Company Ltd.</p>
+        <ul class="cv-points">
+          <li>
+            Desk study and simulation of a 40 MW solar PV project for Vidhyut Utpadan
+            Company Ltd., with estimated annual generation around 85 GWh.
+          </li>
+          <li>
+            Assisted in substation design and in the survey of a new transmission line
+            for expansion of the Kathmandu Valley transmission network.
+          </li>
+        </ul>
+      </li>
+
+      <li class="cv-item">
+        <div class="cv-item-head">
+          <h3 class="cv-role">Trainer, Training Program</h3>
+          <p class="cv-when">2023</p>
+        </div>
+        <p class="cv-where">Nepal Hydropower Academy</p>
+        <ul class="cv-points">
+          <li>Delivered a two-day training course on basic PLC, SCADA and HMI systems.</li>
+        </ul>
+      </li>
+
+      <li class="cv-item">
+        <div class="cv-item-head">
+          <h3 class="cv-role">Student Intern</h3>
+          <p class="cv-when">2022</p>
+        </div>
+        <p class="cv-where">Middle Marsyangdi Hydropower</p>
+        <ul class="cv-points">
+          <li>
+            Worked with the plant team on the operation, maintenance and components of
+            the hydropower station.
+          </li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap section">
+    <h2 class="section-mark">Skills</h2>
+    <div class="section-body">
+      <dl class="cv-skills">
+        <dt>Power systems &amp; electronics</dt>
+        <dd>
+          Grid-forming and grid-following inverters, LCL filters, DC&ndash;DC converters,
+          solar PV system design, microgrid stability, renewable energy integration
+        </dd>
+
+        <dt>Industrial automation</dt>
+        <dd>
+          Siemens TIA Portal (S7-1200, LAD and SCL), PLC, SCADA and HMI systems,
+          hydro turbine governor systems
+        </dd>
+
+        <dt>Modelling &amp; simulation</dt>
+        <dd>MATLAB/Simulink, PVsyst, Autodesk AutoCAD</dd>
+
+        <dt>Control</dt>
+        <dd>
+          Model predictive control, system identification, droop and secondary control,
+          PID tuning, state-space modelling
+        </dd>
+
+        <dt>Programming</dt>
+        <dd>Python (NumPy, SciPy, Pandas), MATLAB</dd>
+
+        <dt>Machine learning</dt>
+        <dd>
+          Physics-informed neural networks, reinforcement learning, regression and
+          neural network modelling
+        </dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section">
+  <h2 class="section-mark">Projects</h2>
+  <div class="section-body">
+    <ul class="cv-points cv-points-flat">
+      <li>
+        A fuzzy logic based automatic voltage regulator (AVR) for an alternator
+        &mdash; BE final year project.
+      </li>
+      <li>Power distribution and illumination design for a commercial building.</li>
+      <li>Design and cost estimation of a standalone solar PV system.</li>
+    </ul>
+    <p class="more">
+      <a href="{{ '/' | relative_url }}#research">Current research work &rarr;</a>
+    </p>
+  </div>
+</section>
+
+<section class="band band-end">
+  <div class="wrap section">
+    <h2 class="section-mark">Certifications</h2>
+    <div class="section-body">
+      <dl class="cv-skills">
+        <dt>DTU (Coursera)</dt>
+        <dd>Wind Energy; Photovoltaic Systems</dd>
+
+        <dt>IBM (Coursera)</dt>
+        <dd>Python for Data Science, AI and Development; Supervised Machine Learning: Regression</dd>
+
+        <dt>DeepLearning.AI (Coursera)</dt>
+        <dd>Neural Networks and Deep Learning</dd>
+      </dl>
+
+      <p class="cv-foot">
+        <a href="{{ site.contact.cv | relative_url }}">Download this CV as a PDF</a>
+        &middot;
+        <a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a>
+      </p>
+    </div>
+  </div>
+</section>

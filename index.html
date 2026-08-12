@@ -9,14 +9,15 @@ simulation: true
     <p class="eyebrow">Grid-forming inverters &middot; islanded microgrids</p>
     <h1 class="hero-title">Making nonlinear inverter dynamics linear enough to control.</h1>
     <p class="hero-lede">
-      I'm a graduate electrical engineering researcher. My thesis lifts the dynamics of
-      droop-controlled grid-forming inverters into a Koopman observable space, where a
-      linear predictor is accurate enough to drive a constrained MPC — and then checks
-      that claim against a reinforcement learning baseline on the same testbed.
+      I'm an electrical engineer in Kathmandu, completing an MSc in power electronics
+      and drive engineering. My thesis lifts the dynamics of droop-controlled
+      grid-forming inverters into a Koopman observable space, where a linear predictor
+      is accurate enough to drive a constrained MPC. Away from the simulation, I rebuild
+      hydropower governors and write the PLC code that runs them.
     </p>
     <p class="hero-actions">
       <a class="btn" href="#research">See the work</a>
-      <a class="btn btn-quiet" href="{{ '/writing/' | relative_url }}">Read the notes</a>
+      <a class="btn btn-quiet" href="{{ '/cv/' | relative_url }}">CV</a>
     </p>
   </div>
 
@@ -295,36 +296,96 @@ simulation: true
 </section>
 
 <section class="wrap section">
-  <p class="section-mark">Writing</p>
+  <p class="section-mark">Practice</p>
   <div class="section-body">
-    <h2 class="section-title">Notes from the middle of the work</h2>
-    <ul class="postlist">
-      {% for post in site.posts limit: 5 %}
-      <li class="postrow">
-        <a href="{{ post.url | relative_url }}">
-          <span class="postrow-date">{{ post.date | date: "%d %b %Y" }}</span>
-          <span class="postrow-title">{{ post.title }}</span>
-        </a>
+    <h2 class="section-title">The same problems, on real plant</h2>
+    <p class="section-intro">
+      Control theory that never leaves a simulation is hard to trust. Most of what I
+      know about governors, droop and commissioning came from machines that were
+      already broken when I arrived.
+    </p>
+
+    <ul class="practice">
+      <li class="practice-row">
+        <p class="practice-when">2024 &ndash; present</p>
+        <div class="practice-what">
+          <span class="practice-role">
+            Electro-mechanical consultant
+            <span class="practice-org">&mdash; National Hydro Power Co. Ltd.</span>
+          </span>
+          <p class="practice-note">
+            Rebuilt and commissioned the damaged 4WT1000-4.0XT governor of the 2.5 MW
+            Indrawati III unit, and redesigned its frequency and gate control program in
+            TIA Portal. The unit is back in service and still running.
+          </p>
+        </div>
       </li>
-      {% endfor %}
+
+      <li class="practice-row">
+        <p class="practice-when">2023</p>
+        <div class="practice-what">
+          <span class="practice-role">
+            Electrical engineering intern
+            <span class="practice-org">&mdash; NEA Engineering Company Ltd.</span>
+          </span>
+          <p class="practice-note">
+            Desk study and simulation of a 40 MW solar PV project, around 85 GWh a year,
+            plus substation design and transmission line survey work for the Kathmandu
+            Valley network.
+          </p>
+        </div>
+      </li>
+
+      <li class="practice-row">
+        <p class="practice-when">2023</p>
+        <div class="practice-what">
+          <span class="practice-role">
+            Trainer
+            <span class="practice-org">&mdash; Nepal Hydropower Academy</span>
+          </span>
+          <p class="practice-note">
+            A two-day course on PLC, SCADA and HMI fundamentals.
+          </p>
+        </div>
+      </li>
     </ul>
-    <p class="more"><a href="{{ '/writing/' | relative_url }}">Everything &rarr;</a></p>
+
+    <p class="more"><a href="{{ '/cv/' | relative_url }}">Full CV &rarr;</a></p>
   </div>
 </section>
 
-<section class="band band-end">
+<section class="band">
   <div class="wrap section">
+    <p class="section-mark">Writing</p>
+    <div class="section-body">
+      <h2 class="section-title">Notes from the middle of the work</h2>
+      <ul class="postlist">
+        {% for post in site.posts limit: 5 %}
+        <li class="postrow">
+          <a href="{{ post.url | relative_url }}">
+            <span class="postrow-date">{{ post.date | date: "%d %b %Y" }}</span>
+            <span class="postrow-title">{{ post.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="more"><a href="{{ '/writing/' | relative_url }}">Everything &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section">
     <p class="section-mark">Contact</p>
     <div class="section-body">
       <h2 class="section-title">Get in touch</h2>
       <p class="section-intro">
-        Happy to talk about Koopman methods, inverter control, or anything microgrid
-        adjacent — including the parts that didn't work.
+        Happy to talk about Koopman methods, inverter control, governor commissioning,
+        or anything microgrid adjacent — including the parts that didn't work.
       </p>
       <p class="hero-actions">
         <a class="btn" href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a>
+        {% if site.contact.linkedin != "" %}<a class="btn btn-quiet" href="{{ site.contact.linkedin }}">LinkedIn</a>{% endif %}
         {% if site.contact.github != "" %}<a class="btn btn-quiet" href="https://github.com/{{ site.contact.github }}">GitHub</a>{% endif %}
       </p>
     </div>
-  </div>
 </section>
